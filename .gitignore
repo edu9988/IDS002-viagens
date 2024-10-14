@@ -1,3 +1,6 @@
+curl_http_req.bash
+curl_json_body.txt
+
 /target/
 !.mvn/wrapper/maven-wrapper.jar
 
