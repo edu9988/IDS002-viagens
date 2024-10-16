@@ -41,6 +41,62 @@ public class LocationService {
             .findFirst().orElse(null);
     }
 
+
+    public List<Location> findByParams( String name ,
+        String nickname, String city
+    ){
+        List<Location> locs;
+        if( name != null && !name.isEmpty() ){
+            locs = locations.stream()
+                .filter( l -> l.getName()
+                    .toLowerCase()
+                    .indexOf( name.toLowerCase() ) > -1
+                )
+                .toList();
+            if( nickname != null && !nickname.isEmpty() ){
+                locs = locs.stream()
+                    .filter( l -> l.getNickname()
+                        .toLowerCase()
+                        .indexOf( nickname.toLowerCase() ) > -1
+                    )
+                    .toList();
+                if( city != null && !city.isEmpty() ){
+                    locs = locs.stream()
+                        .filter( l -> l.getCity()
+                            .toLowerCase()
+                            .indexOf( city.toLowerCase() ) > -1
+                        )
+                        .toList();
+                }
+            }
+        }
+        else if( nickname != null && !nickname.isEmpty() ){
+            locs = locations.stream()
+                .filter( l -> l.getNickname()
+                    .toLowerCase()
+                    .indexOf( nickname.toLowerCase() ) > -1
+                )
+                .toList();
+            if( city != null && !city.isEmpty() ){
+                locs = locs.stream()
+                    .filter( l -> l.getCity()
+                        .toLowerCase()
+                        .indexOf( city.toLowerCase() ) > -1
+                    )
+                    .toList();
+            }
+        }
+        else{
+            locs = locations.stream()
+                .filter( l -> l.getCity()
+                    .toLowerCase()
+                    .indexOf( city.toLowerCase() ) > -1
+                )
+                .toList();
+        }
+        return locs;
+    }
+
     public void create( Location location ){
         Long newId = (long) (locations.size()+1);
         location.setId( newId );
