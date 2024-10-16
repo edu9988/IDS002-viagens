@@ -66,4 +66,13 @@ public class LocationService {
         }
         return false;
     }
+
+    public Boolean delete( Long id ){
+        Location loc = find(id);
+        if( loc != null ){
+            locations.remove( loc );
+            return true;
+        }
+        return false;
+    }
 }
