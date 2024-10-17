@@ -30,4 +30,13 @@ public class CustomerController {
     public ResponseEntity<List<Customer>> getAll(){
         return ResponseEntity.ok(customerService.findAll());
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Customer> get( @PathVariable("id") Long id ){
+        Customer customer = customerService.find(id);
+
+        if( customer != null )
+            return ResponseEntity.ok(customer);
+        return ResponseEntity.notFound().build();
+    }
 }

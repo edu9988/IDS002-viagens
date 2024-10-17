@@ -31,4 +31,10 @@ public class CustomerService {
     public List<Customer> findAll(){
         return customers;
     }
+
+    public Customer find( Long id ){
+        return customers.stream()
+            .filter( c -> c.getId() == id )
+            .findFirst().orElse(null);
+    }
 }
