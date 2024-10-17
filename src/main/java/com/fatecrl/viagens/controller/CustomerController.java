@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.fatecrl.viagens.model.Customer;
+import com.fatecrl.viagens.model.Location;
 import com.fatecrl.viagens.service.CustomerService;
 
 @RestController
@@ -49,5 +50,13 @@ public class CustomerController {
             .buildAndExpand( customer.getId() )
             .toUri();
         return ResponseEntity.created( uri ).body( customer );
+    }
+
+    @PutMapping
+    public ResponseEntity<Customer> update( @RequestBody Customer customer ){
+        if( customerService.update(customer) )
+            return ResponseEntity.ok(customer);
+        
+        return ResponseEntity.notFound().build();
     }
 }

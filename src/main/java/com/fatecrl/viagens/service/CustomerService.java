@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.fatecrl.viagens.model.Customer;
+import com.fatecrl.viagens.model.Location;
 
 @Service
 public class CustomerService {
@@ -38,9 +39,39 @@ public class CustomerService {
             .findFirst().orElse(null);
     }
 
+    public Customer find( Customer customer ){
+        return customers.stream()
+            .filter( c -> c.equals(customer) )
+            .findFirst().orElse(null);
+    }
+
     public void create( Customer customer ){
         Long newId = (long) (customers.size()+1);
         customer.setId( newId );
         customers.add( customer );
+    }
+
+    public Boolean update( Customer customer ){
+        Customer _cust = find( customer );
+        if( _cust != null ){
+            if( !customer.getName().isBlank() )
+                _cust.setName( customer.getName() );
+            if( !customer.getLastname().isBlank() )
+                _cust.setLastname( customer.getLastname() );
+            if( !customer.getAddress().isBlank() )
+                _cust.setAddress( customer.getAddress() );
+            if( !customer.getCity().isBlank() )
+                _cust.setCity( customer.getCity() );
+            if( customer.getState() != null )
+                _cust.setState( customer.getState() );
+            if( !customer.getCountry().isBlank() )
+                _cust.setCountry( customer.getCountry() );
+            if( customer.getBirthDate() != null )
+                _cust.setBirthDate( customer.getBirthDate() );
+            if( customer.getLimitAmount() != null )
+                _cust.setLimitAmount( customer.getLimitAmount() );
+            return true;
+        }
+        return false;
     }
 }
