@@ -7,7 +7,6 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.fatecrl.viagens.model.Customer;
-import com.fatecrl.viagens.model.Location;
 
 @Service
 public class CustomerService {
@@ -70,6 +69,15 @@ public class CustomerService {
                 _cust.setBirthDate( customer.getBirthDate() );
             if( customer.getLimitAmount() != null )
                 _cust.setLimitAmount( customer.getLimitAmount() );
+            return true;
+        }
+        return false;
+    }
+
+    public Boolean delete( Long id ){
+        Customer customer = find(id);
+        if( customer != null ){
+            customers.remove( customer );
             return true;
         }
         return false;
