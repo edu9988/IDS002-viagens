@@ -2,18 +2,21 @@ package com.fatecrl.viagens.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
-public class Location implements Serializable{
+public class Customer implements Serializable{
 
     private Long id;
     private String name;
-    private String nickname;
+    private String lastname;
     private String address;
     private String city;
     private BigDecimal state;
     private String country;
+    private LocalDate birthDate;
+    private BigDecimal limitAmount;
     
-    public Location(){
+    public Customer(){
     }
     
     public Long getId() {
@@ -28,11 +31,11 @@ public class Location implements Serializable{
     public void setName(String name) {
         this.name = name;
     }
-    public String getNickname() {
-        return nickname;
+    public String getLastname() {
+        return lastname;
     }
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
     }
     public String getAddress() {
         return address;
@@ -61,18 +64,35 @@ public class Location implements Serializable{
     public void setCountry(String country) {
         this.country = country;
     }
+    public LocalDate getBirthDate() {
+        return birthDate;
+    }
+    public void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
+    }
+    public BigDecimal getLimitAmount() {
+        return limitAmount;
+    }
+    public void setLimitAmount(BigDecimal limitAmount) {
+        this.limitAmount = limitAmount;
+    }
+    public void setLimitAmount(int limitAmount) {
+        this.limitAmount = new BigDecimal( limitAmount );
+    }
 
-    @Override  // generated automatically
+    @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((id == null) ? 0 : id.hashCode());
         result = prime * result + ((name == null) ? 0 : name.hashCode());
-        result = prime * result + ((nickname == null) ? 0 : nickname.hashCode());
+        result = prime * result + ((lastname == null) ? 0 : lastname.hashCode());
         result = prime * result + ((address == null) ? 0 : address.hashCode());
         result = prime * result + ((city == null) ? 0 : city.hashCode());
         result = prime * result + ((state == null) ? 0 : state.hashCode());
         result = prime * result + ((country == null) ? 0 : country.hashCode());
+        result = prime * result + ((birthDate == null) ? 0 : birthDate.hashCode());
+        result = prime * result + ((limitAmount == null) ? 0 : limitAmount.hashCode());
         return result;
     }
 
@@ -84,7 +104,7 @@ public class Location implements Serializable{
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Location other = (Location) obj;
+        Customer other = (Customer) obj;
         if (id == null) {
             if (other.id != null)
                 return false;
