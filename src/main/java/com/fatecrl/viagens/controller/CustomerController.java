@@ -39,4 +39,15 @@ public class CustomerController {
             return ResponseEntity.ok(customer);
         return ResponseEntity.notFound().build();
     }
+
+    @PostMapping
+    public ResponseEntity<Customer> create( @RequestBody Customer customer ){
+        customerService.create( customer );
+        URI uri = ServletUriComponentsBuilder
+            .fromCurrentRequest()
+            .path("/{id}")
+            .buildAndExpand( customer.getId() )
+            .toUri();
+        return ResponseEntity.created( uri ).body( customer );
+    }
 }

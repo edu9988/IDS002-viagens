@@ -37,4 +37,10 @@ public class CustomerService {
             .filter( c -> c.getId() == id )
             .findFirst().orElse(null);
     }
+
+    public void create( Customer customer ){
+        Long newId = (long) (customers.size()+1);
+        customer.setId( newId );
+        customers.add( customer );
+    }
 }
