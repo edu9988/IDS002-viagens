@@ -96,7 +96,7 @@ public class Customer implements Serializable{
         return result;
     }
 
-    @Override  // generated automatically, then edited
+    @Override  // copied from Location
     public boolean equals(Object obj) {
         if (this == obj)
             return true;

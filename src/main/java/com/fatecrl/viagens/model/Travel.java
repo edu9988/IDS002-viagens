@@ -94,6 +94,38 @@ public class Travel implements Serializable{
     public void setCustomer(Customer customer) {
         this.customer = customer;
     }
-    
-    
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        result = prime * result + ((orderNumber == null) ? 0 : orderNumber.hashCode());
+        result = prime * result + ((amount == null) ? 0 : amount.hashCode());
+        result = prime * result + ((source == null) ? 0 : source.hashCode());
+        result = prime * result + ((destination == null) ? 0 : destination.hashCode());
+        result = prime * result + ((startDateTime == null) ? 0 : startDateTime.hashCode());
+        result = prime * result + ((endDateTime == null) ? 0 : endDateTime.hashCode());
+        result = prime * result + ((type == null) ? 0 : type.hashCode());
+        result = prime * result + ((customer == null) ? 0 : customer.hashCode());
+        return result;
+    }
+
+    @Override  // copied from Location
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Travel other = (Travel) obj;
+        if (id == null) {
+            if (other.id != null)
+                return false;
+        } else if (!id.equals(other.id))
+            return false;
+        
+        return true;
+    }
 }
