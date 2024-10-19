@@ -10,7 +10,7 @@ import com.fatecrl.viagens.model.Customer;
 import com.fatecrl.viagens.model.Status;
 
 @Service
-public class CustomerService {
+public class CustomerService implements IService<Customer> {
 
     private static List<Customer> customers = new ArrayList<Customer>();
 
@@ -30,10 +30,12 @@ public class CustomerService {
         customers.add(customer);
     }
 
+    @Override
     public List<Customer> findAll(){
         return customers;
     }
 
+    @Override
     public Customer find( Long id ){
         return customers.stream()
             .filter( c -> c.getId() == id )
@@ -46,12 +48,14 @@ public class CustomerService {
             .findFirst().orElse(null);
     }
 
+    @Override
     public void create( Customer customer ){
         Long newId = (long) (customers.size()+1);
         customer.setId( newId );
         customers.add( customer );
     }
 
+    @Override
     public Boolean update( Customer customer ){
         Customer _cust = find( customer );
         if( _cust != null ){
@@ -76,6 +80,7 @@ public class CustomerService {
         return false;
     }
 
+    @Override
     public Boolean delete( Long id ){
         Customer customer = find(id);
         if( customer != null ){

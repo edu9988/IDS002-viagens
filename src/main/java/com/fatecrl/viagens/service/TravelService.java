@@ -10,7 +10,7 @@ import com.fatecrl.viagens.model.Travel;
 import com.fatecrl.viagens.model.TripType;
 
 @Service
-public class TravelService {
+public class TravelService implements IService<Travel>{
 
     private static List<Travel> travels = new ArrayList<Travel>();
 
@@ -30,10 +30,12 @@ public class TravelService {
         travels.add(travel);
     }
 
+    @Override
     public List<Travel> findAll(){
         return travels;
     }
 
+    @Override
     public Travel find( Long id ){
         return travels.stream()
             .filter( t -> t.getId() == id )
@@ -46,12 +48,14 @@ public class TravelService {
             .findFirst().orElse(null);
     }
 
+    @Override
     public void create( Travel travel ){
         Long newId = (long) (travels.size()+1);
         travel.setId( newId );
         travels.add( travel );
     }
 
+    @Override
     public Boolean update( Travel travel ){
         Travel _trav = find( travel );
         if( _trav != null ){
@@ -76,6 +80,7 @@ public class TravelService {
         return false;
     }
 
+    @Override
     public Boolean delete( Long id ){
         Travel travel = find(id);
         if( travel != null ){

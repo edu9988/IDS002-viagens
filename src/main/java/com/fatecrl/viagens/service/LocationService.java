@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.fatecrl.viagens.model.Location;
 
 @Service
-public class LocationService {
+public class LocationService implements IService<Location>{
 
     private static List<Location> locations = new ArrayList<Location>();
 
@@ -25,10 +25,12 @@ public class LocationService {
         locations.add(location);
     }
 
+    @Override
     public List<Location> findAll(){
         return locations;
     }
 
+    @Override
     public Location find( Long id ){
         return locations.stream()
             .filter( l -> l.getId() == id )
@@ -97,12 +99,14 @@ public class LocationService {
         return locs;
     }
 
+    @Override
     public void create( Location location ){
         Long newId = (long) (locations.size()+1);
         location.setId( newId );
         locations.add( location );
     }
 
+    @Override
     public Boolean update( Location location ){
         Location _loc = find( location );
         if( _loc != null ){
@@ -123,6 +127,7 @@ public class LocationService {
         return false;
     }
 
+    @Override
     public Boolean delete( Long id ){
         Location loc = find(id);
         if( loc != null ){
