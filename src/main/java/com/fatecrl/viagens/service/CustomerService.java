@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.fatecrl.viagens.model.Customer;
+import com.fatecrl.viagens.model.Status;
 
 @Service
 public class CustomerService {
@@ -25,6 +26,7 @@ public class CustomerService {
         customer.setCountry("Brasil");
         customer.setBirthDate( LocalDate.now().minusYears(25) );
         customer.setLimitAmount(3000);
+        customer.setStatus( Status.ACTIVE );
         customers.add(customer);
     }
 

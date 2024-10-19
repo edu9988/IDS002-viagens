@@ -15,6 +15,7 @@ public class Customer implements Serializable{
     private String country;
     private LocalDate birthDate;
     private BigDecimal limitAmount;
+    private Status status;
     
     public Customer(){
     }
@@ -78,6 +79,12 @@ public class Customer implements Serializable{
     }
     public void setLimitAmount(int limitAmount) {
         this.limitAmount = new BigDecimal( limitAmount );
+    }
+    public Status getStatus(){
+        return status;
+    }
+    public void setStatus( Status status ){
+        this.status = status;
     }
 
     @Override
