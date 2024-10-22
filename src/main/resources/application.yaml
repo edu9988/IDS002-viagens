@@ -1,3 +1,15 @@
+spring:
+    application:
+        name: viagens
+    datasource:
+        url: jdbc:postgresql://localhost:5432/db_viagens
+        username: postgres
+        password: ${DB_PW}
+        driver-class-name: org.postgresql.Driver
+    jpa:
+        hibernate:
+            ddl-auto: update
+        show-sql: true
 server:
     servlet:
         contextPath: /api
