@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.fatecrl.viagens.model.Customer;
 import com.fatecrl.viagens.model.Travel;
 import com.fatecrl.viagens.model.TripType;
 
@@ -78,6 +79,18 @@ public class TravelService implements IService<Travel>{
                 _trav.setType( travel.getType() );
             if( travel.getCustomer() != null )
                 _trav.setCustomer( travel.getCustomer() );
+            return true;
+        }
+        return false;
+    }
+
+    public Boolean updateDates( Travel travel ){
+        Travel _trav = find( travel );
+        if( _trav != null ){
+            if( travel.getStartDateTime() != null )
+                _trav.setStartDateTime( travel.getStartDateTime() );
+            if( travel.getEndDateTime() != null )
+                _trav.setEndDateTime( travel.getEndDateTime() );
             return true;
         }
         return false;
