@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.fatecrl.viagens.model.Customer;
+import com.fatecrl.viagens.model.Location;
 import com.fatecrl.viagens.model.Status;
 
 @Service
@@ -46,6 +47,36 @@ public class CustomerService implements IService<Customer> {
         return customers.stream()
             .filter( c -> c.equals(customer) )
             .findFirst().orElse(null);
+    }
+
+    public List<Customer> findByParams(
+        String name ,
+        LocalDate birthDate
+    ){
+        List<Customer> custs;
+        if( name != null && !name.isEmpty() ){
+            custs = customers.stream()
+                .filter( c -> c.getName()
+                    .toLowerCase()
+                    .indexOf( name.toLowerCase() ) > -1
+                )
+                .toList();
+            if( birthDate != null ){
+                custs = custs.stream()
+                    .filter( c -> c.getBirthDate()
+                        .equals( birthDate )
+                    )
+                    .toList();
+            }
+        }
+        else{
+            custs = customers.stream()
+                .filter( c -> c.getBirthDate()
+                    .equals( birthDate )
+                )
+                .toList();
+        }
+        return custs;
     }
 
     @Override

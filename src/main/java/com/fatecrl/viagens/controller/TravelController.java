@@ -5,15 +5,14 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.fatecrl.viagens.model.Travel;
@@ -49,6 +48,9 @@ public class TravelController {
             .buildAndExpand( travel.getId() )
             .toUri();
         return ResponseEntity.created( uri ).body( travel );
+        //return ResponseEntity.badRequest()            (400)  (to do)
+        //return ResponseEntity.unprocessable()         (422)  (to do)
+        //return ResponseEntity.internalServerError()   (500)  (to do)
     }
 
     @PutMapping
@@ -57,6 +59,8 @@ public class TravelController {
             return ResponseEntity.ok(travel);
         
         return ResponseEntity.notFound().build();
+        //return ResponseEntity.badRequest()      (400)  (to do)
+        //return ResponseEntity.unprocessable()   (422)  (to do)
     }
 
     @DeleteMapping("/{id}")

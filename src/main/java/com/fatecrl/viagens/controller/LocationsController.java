@@ -32,15 +32,16 @@ public class LocationsController {
         @RequestParam(required=false) String nickname,
         @RequestParam(required=false) String city
     ){
-        System.out.println( "name: " + name );
-        System.out.println( "nickname: " + nickname );
-        System.out.println( "city: " + city );
+        //System.out.println( "name: " + name );
+        //System.out.println( "nickname: " + nickname );
+        //System.out.println( "city: " + city );
 
         if( (name != null && !name.isEmpty()) ||
             (nickname != null && !nickname.isEmpty()) ||
             (city != null && !city.isEmpty())
         ){
-            List<Location> locations = locService.findByParams(name,nickname,city);
+            List<Location> locations = locService
+                .findByParams(name,nickname,city);
             if( locations != null && locations.size() > 0 )
                 return ResponseEntity.ok(locations);
             return ResponseEntity.notFound().build();
@@ -67,6 +68,9 @@ public class LocationsController {
             .buildAndExpand( loc.getId() )
             .toUri();
         return ResponseEntity.created( uri ).body( loc );
+        //return ResponseEntity.badRequest()            (400)  (to do)
+        //return ResponseEntity.unprocessable()         (422)  (to do)
+        //return ResponseEntity.internalServerError()   (500)  (to do)
     }
 
     @PutMapping
@@ -75,6 +79,8 @@ public class LocationsController {
             return ResponseEntity.ok(loc);
         
         return ResponseEntity.notFound().build();
+        //return ResponseEntity.badRequest()      (400)  (to do)
+        //return ResponseEntity.unprocessable()   (422)  (to do)
     }
 
     @DeleteMapping("/{id}")
