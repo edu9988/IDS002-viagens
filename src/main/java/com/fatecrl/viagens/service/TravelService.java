@@ -50,6 +50,9 @@ public class TravelService implements IService<Travel>{
 
     @Override
     public void create( Travel travel ){
+        //verify Customer limit before inserting...
+        //must know travel cost??
+        
         Long newId = (long) (travels.size()+1);
         travel.setId( newId );
         travels.add( travel );

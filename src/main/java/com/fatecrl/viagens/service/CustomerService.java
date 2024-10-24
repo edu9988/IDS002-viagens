@@ -7,7 +7,6 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.fatecrl.viagens.model.Customer;
-import com.fatecrl.viagens.model.Location;
 import com.fatecrl.viagens.model.Status;
 
 @Service
@@ -106,6 +105,16 @@ public class CustomerService implements IService<Customer> {
                 _cust.setBirthDate( customer.getBirthDate() );
             if( customer.getLimitAmount() != null )
                 _cust.setLimitAmount( customer.getLimitAmount() );
+            return true;
+        }
+        return false;
+    }
+
+    public Boolean updateStatus( Customer customer ){
+        Customer _cust = find( customer );
+        if( _cust != null ){
+            if( customer.getStatus() != null )
+                _cust.setStatus( customer.getStatus() );
             return true;
         }
         return false;

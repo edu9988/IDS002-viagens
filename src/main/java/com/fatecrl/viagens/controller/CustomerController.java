@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.fatecrl.viagens.model.Customer;
-import com.fatecrl.viagens.model.Location;
 import com.fatecrl.viagens.service.CustomerService;
 
 @RestController
@@ -80,6 +80,18 @@ public class CustomerController {
         return ResponseEntity.notFound().build();
         //return ResponseEntity.badRequest()      (400)  (to do)
         //return ResponseEntity.unprocessable()   (422)  (to do)
+    }
+
+    @PatchMapping
+    public ResponseEntity<Customer> patch( @RequestBody Customer customer ){
+        //System.out.println("id: "+customer.getId());
+        //System.out.println("name: "+customer.getName());
+        //System.out.println("status: "+customer.getStatus());
+        if( customerService.updateStatus(customer) )
+            return ResponseEntity.ok(
+                customerService.find(customer.getId())
+            );
+        return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")
