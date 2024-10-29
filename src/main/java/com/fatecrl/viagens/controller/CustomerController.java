@@ -80,17 +80,18 @@ public class CustomerController {
         return ResponseEntity.notFound().build();
         //return ResponseEntity.badRequest()      (400)  (to do)
         //return ResponseEntity.unprocessable()   (422)  (to do)
-    }
+    }   
 
-    @PatchMapping
-    public ResponseEntity<Customer> patch( @RequestBody Customer customer ){
+    @PatchMapping("/{id}")
+    public ResponseEntity<Customer> patch(
+        @PathVariable("id") Long id,
+        @RequestBody Customer customer
+    ){
         //System.out.println("id: "+customer.getId());
         //System.out.println("name: "+customer.getName());
         //System.out.println("status: "+customer.getStatus());
-        if( customerService.updateStatus(customer) )
-            return ResponseEntity.ok(
-                customerService.find(customer.getId())
-            );
+        if( customerService.updateStatus(id,customer) )
+            return ResponseEntity.ok().build();
         return ResponseEntity.notFound().build();
     }
 

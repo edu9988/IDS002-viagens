@@ -20,7 +20,7 @@ public class LocationService implements IService<Location>{
         location.setNickname("Fatec Baixada Santista");
         location.setAddress("R. Senador Feijo 777");
         location.setCity("Santos");
-        location.setState(45);
+        location.setState("SP");
         location.setCountry("Brasil");
         locations.add(location);
     }

@@ -28,6 +28,8 @@ public class DotenvConfig {
                         if (parts.length == 2) {
                             System.setProperty(parts[0], parts[1]);
                         }
+                        else
+                            System.setProperty(parts[0], parts[1]);
                     }
                 }
             }

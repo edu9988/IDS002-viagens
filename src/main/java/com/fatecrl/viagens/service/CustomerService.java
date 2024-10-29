@@ -22,7 +22,7 @@ public class CustomerService implements IService<Customer> {
         customer.setLastname("Stern");
         customer.setAddress("R. Min. Joao Mendes 177");
         customer.setCity("Santos");
-        customer.setState(11);
+        customer.setState("SP");
         customer.setCountry("Brasil");
         customer.setBirthDate( LocalDate.now().minusYears(25) );
         customer.setLimitAmount(3000);
@@ -110,8 +110,8 @@ public class CustomerService implements IService<Customer> {
         return false;
     }
 
-    public Boolean updateStatus( Customer customer ){
-        Customer _cust = find( customer );
+    public Boolean updateStatus( Long id, Customer customer ){
+        Customer _cust = find( id );
         if( _cust != null ){
             if( customer.getStatus() != null )
                 _cust.setStatus( customer.getStatus() );

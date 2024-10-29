@@ -11,7 +11,7 @@ public class Customer implements Serializable{
     private String lastname;
     private String address;
     private String city;
-    private BigDecimal state;
+    private String state;
     private String country;
     private LocalDate birthDate;
     private BigDecimal limitAmount;
@@ -50,14 +50,11 @@ public class Customer implements Serializable{
     public void setCity(String city) {
         this.city = city;
     }
-    public BigDecimal getState() {
+    public String getState() {
         return state;
     }
-    public void setState(BigDecimal state) {
+    public void setState(String state) {
         this.state = state;
-    }
-    public void setState(int state){
-        this.state = new BigDecimal( state );
     }
     public String getCountry() {
         return country;

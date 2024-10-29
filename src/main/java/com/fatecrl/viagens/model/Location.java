@@ -10,7 +10,7 @@ public class Location implements Serializable{
     private String nickname;
     private String address;
     private String city;
-    private BigDecimal state;
+    private String state;
     private String country;
     
     public Location(){
@@ -46,14 +46,11 @@ public class Location implements Serializable{
     public void setCity(String city) {
         this.city = city;
     }
-    public BigDecimal getState() {
+    public String getState() {
         return state;
     }
-    public void setState(BigDecimal state) {
+    public void setState(String state) {
         this.state = state;
-    }
-    public void setState(int state){
-        this.state = new BigDecimal( state );
     }
     public String getCountry() {
         return country;
