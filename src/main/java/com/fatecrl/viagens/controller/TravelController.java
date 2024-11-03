@@ -20,6 +20,8 @@ import com.fatecrl.viagens.model.Customer;
 import com.fatecrl.viagens.model.Travel;
 import com.fatecrl.viagens.service.TravelService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/travels")
 public class TravelController {

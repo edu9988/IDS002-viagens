@@ -19,6 +19,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.fatecrl.viagens.model.Location;
 import com.fatecrl.viagens.service.LocationService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/locations")
 public class LocationsController {
@@ -60,7 +62,9 @@ public class LocationsController {
     }
 
     @PostMapping
-    public ResponseEntity<Location> create( @RequestBody Location loc ){
+    public ResponseEntity<Location> create(
+        @RequestBody Location loc
+    ){
         locService.create( loc );
         URI uri = ServletUriComponentsBuilder
             .fromCurrentRequest()
