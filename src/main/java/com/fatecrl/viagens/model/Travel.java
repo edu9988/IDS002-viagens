@@ -4,6 +4,13 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
 public class Travel implements Serializable{
 
     private Long id;
@@ -16,83 +23,8 @@ public class Travel implements Serializable{
     private TripType type;
     private Customer customer;
     
-    public Travel() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getOrderNumber() {
-        return orderNumber;
-    }
-
-    public void setOrderNumber(String orderNumber) {
-        this.orderNumber = orderNumber;
-    }
-
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
-
     public void setAmount(int amount) {
         this.amount = new BigDecimal( amount );
-    }
-
-    public Location getSource() {
-        return source;
-    }
-
-    public void setSource(Location source) {
-        this.source = source;
-    }
-
-    public Location getDestination() {
-        return destination;
-    }
-
-    public void setDestination(Location destination) {
-        this.destination = destination;
-    }
-
-    public LocalDateTime getStartDateTime() {
-        return startDateTime;
-    }
-
-    public void setStartDateTime(LocalDateTime startDateTime) {
-        this.startDateTime = startDateTime;
-    }
-
-    public LocalDateTime getEndDateTime() {
-        return endDateTime;
-    }
-
-    public void setEndDateTime(LocalDateTime endDateTime) {
-        this.endDateTime = endDateTime;
-    }
-
-    public TripType getType() {
-        return type;
-    }
-
-    public void setType(TripType type) {
-        this.type = type;
-    }
-
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
     }
 
     @Override
@@ -100,14 +32,6 @@ public class Travel implements Serializable{
         final int prime = 31;
         int result = 1;
         result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result + ((orderNumber == null) ? 0 : orderNumber.hashCode());
-        result = prime * result + ((amount == null) ? 0 : amount.hashCode());
-        result = prime * result + ((source == null) ? 0 : source.hashCode());
-        result = prime * result + ((destination == null) ? 0 : destination.hashCode());
-        result = prime * result + ((startDateTime == null) ? 0 : startDateTime.hashCode());
-        result = prime * result + ((endDateTime == null) ? 0 : endDateTime.hashCode());
-        result = prime * result + ((type == null) ? 0 : type.hashCode());
-        result = prime * result + ((customer == null) ? 0 : customer.hashCode());
         return result;
     }
 
