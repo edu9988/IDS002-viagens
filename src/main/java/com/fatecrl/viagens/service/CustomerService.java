@@ -11,7 +11,7 @@ import com.fatecrl.viagens.model.Customer;
 import com.fatecrl.viagens.repository.CustomerRepository;
 
 @Service
-public class CustomerService /*implements IService<Customer>*/ {
+public class CustomerService implements IService<Customer> {
 
     @Autowired
     private CustomerRepository repo;
@@ -19,12 +19,12 @@ public class CustomerService /*implements IService<Customer>*/ {
     public CustomerService(){
     }
 
-    //@Override
+    @Override
     public List<Customer> findAll(){
         return repo.findAll();
     }
 
-    //@Override
+    @Override
     public Optional<Customer> find( Long id ){
         return repo.findById(id);
     }
@@ -67,12 +67,12 @@ public class CustomerService /*implements IService<Customer>*/ {
         return custs;
     }
 
-    //@Override
+    @Override
     public void create( Customer customer ){
         repo.save(customer);
     }
 
-    //@Override
+    @Override
     public Boolean update( Customer customer ){
         if( repo.existsById( customer.getId() ) ){
             repo.save(customer);
@@ -91,7 +91,7 @@ public class CustomerService /*implements IService<Customer>*/ {
         return false;
     }
 
-    //@Override
+    @Override
     public Boolean delete( Long id ){
         if( repo.existsById(id) ){
             repo.deleteById(id);

@@ -10,7 +10,7 @@ import com.fatecrl.viagens.model.Location;
 import com.fatecrl.viagens.repository.LocationRepository;
 
 @Service
-public class LocationService /*implements IService<Location>*/{
+public class LocationService implements IService<Location>{
 
     @Autowired
     private LocationRepository repo;
@@ -18,12 +18,12 @@ public class LocationService /*implements IService<Location>*/{
     public LocationService(){
     }
 
-    //@Override
+    @Override
     public List<Location> findAll(){
         return repo.findAll();
     }
 
-   //@Override
+   @Override
     public Optional<Location> find( Long id ){
         return repo.findById(id);
     }
@@ -92,12 +92,12 @@ public class LocationService /*implements IService<Location>*/{
         return locs;
     }
 
-    //@Override
+    @Override
     public void create( Location location ){
         repo.save(location);
     }
 
-    //@Override
+    @Override
     public Boolean update( Location location ){
         if( repo.existsById( location.getId() ) ){
             repo.save(location);
@@ -106,7 +106,7 @@ public class LocationService /*implements IService<Location>*/{
         return false;
     }
 
-    //@Override
+    @Override
     public Boolean delete( Long id ){
         if( repo.existsById(id) ){
             repo.deleteById(id);

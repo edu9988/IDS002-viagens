@@ -10,7 +10,7 @@ import com.fatecrl.viagens.model.Travel;
 import com.fatecrl.viagens.repository.TravelRepository;
 
 @Service
-public class TravelService /*implements IService<Travel>*/{
+public class TravelService implements IService<Travel>{
 
     @Autowired
     private TravelRepository repo;
@@ -18,12 +18,12 @@ public class TravelService /*implements IService<Travel>*/{
     public TravelService(){
     }
 
-    //@Override
+    @Override
     public List<Travel> findAll(){
         return repo.findAll();
     }
 
-    //@Override
+    @Override
     public Optional<Travel> find( Long id ){
         return repo.findById(id);
     }
@@ -36,14 +36,14 @@ public class TravelService /*implements IService<Travel>*/{
     }
     */
 
-    //@Override
+    @Override
     public void create( Travel travel ){
         //verify Customer limit before inserting...
         //must know travel cost??
         repo.save(travel);
     }
 
-    //@Override
+    @Override
     public Boolean update( Travel travel ){
         if( repo.existsById( travel.getId() ) ){
             repo.save(travel);
@@ -64,7 +64,7 @@ public class TravelService /*implements IService<Travel>*/{
         return false;
     }
 
-    //@Override
+    @Override
     public Boolean delete( Long id ){
         if( repo.existsById(id) ){
             repo.deleteById(id);
