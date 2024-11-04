@@ -19,8 +19,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.fatecrl.viagens.model.Location;
 import com.fatecrl.viagens.service.LocationService;
 
-import jakarta.validation.Valid;
-
 @RestController
 @RequestMapping("/locations")
 public class LocationsController {
@@ -54,7 +52,7 @@ public class LocationsController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Location> get( @PathVariable("id") Long id ){
-        Location loc = locService.find(id);
+        Location loc = locService.find(id).orElse(null);
 
         if( loc != null )
             return ResponseEntity.ok(loc);

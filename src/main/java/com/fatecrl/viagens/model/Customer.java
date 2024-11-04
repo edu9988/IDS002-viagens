@@ -4,6 +4,12 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,22 +17,32 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@Entity
+@Table( name = "tb_Customer" )
 public class Customer implements Serializable{
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "cd_Customer")
     private Long id;
+    @Column(name = "nm_FirstName")
     private String name;
+    @Column(name = "nm_LastName")
     private String lastname;
+    @Column(name = "ds_Address")
     private String address;
+    @Column(name = "nm_City")
     private String city;
+    @Column(name = "sg_State")
     private String state;
+    @Column(name = "nm_Country")
     private String country;
+    @Column(name = "dt_BirthDate")
     private LocalDate birthDate;
+    @Column(name = "vl_Limit")
     private BigDecimal limitAmount;
+    @Column(name = "ds_Status")
     private Status status;
-  
-    public void setLimitAmount(int limitAmount) {
-        this.limitAmount = new BigDecimal( limitAmount );
-    }
 
     @Override
     public int hashCode() {

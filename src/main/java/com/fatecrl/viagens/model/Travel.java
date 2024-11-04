@@ -4,8 +4,12 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Past;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,22 +17,31 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@Entity
+@Table( name = "tb_Travel" )
 public class Travel implements Serializable{
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "cd_Travel")
     private Long id;
+    @Column(name = "ds_OrderNumber")
     private String orderNumber;
+    @Column(name = "vl_Amount")
     private BigDecimal amount;
+    @Column(name = "cd_Source")
     private Location source;
+    @Column(name = "cd_Destination")
     private Location destination;
+    @Column(name = "dt_StartDateTime")
     private LocalDateTime startDateTime;
+    @Column(name = "dt_EndDateTime")
     private LocalDateTime endDateTime;
+    @Column(name = "ds_Type")
     private TripType type;
+    @Column(name = "cd_Customer")
     private Customer customer;
     
-    public void setAmount(int amount) {
-        this.amount = new BigDecimal( amount );
-    }
-
     @Override
     public int hashCode() {
         final int prime = 31;

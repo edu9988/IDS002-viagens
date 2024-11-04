@@ -1,55 +1,48 @@
 package com.fatecrl.viagens.service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fatecrl.viagens.model.Location;
+import com.fatecrl.viagens.repository.LocationRepository;
 
 @Service
-public class LocationService implements IService<Location>{
+public class LocationService /*implements IService<Location>*/{
 
-    private static List<Location> locations = new ArrayList<Location>();
+    @Autowired
+    private LocationRepository repo;
 
     public LocationService(){
-        //this is a "fake" location
-        Location location = new Location();
-        location.setId(1L);
-        location.setName("Fatec RL");
-        location.setNickname("Fatec Baixada Santista");
-        location.setAddress("R. Senador Feijo 777");
-        location.setCity("Santos");
-        location.setState("SP");
-        location.setCountry("Brasil");
-        locations.add(location);
     }
 
-    @Override
+    //@Override
     public List<Location> findAll(){
-        return locations;
+        return repo.findAll();
     }
 
-    @Override
-    public Location find( Long id ){
-        return locations.stream()
-            .filter( l -> l.getId() == id )
-            .findFirst().orElse(null);
+   //@Override
+    public Optional<Location> find( Long id ){
+        return repo.findById(id);
     }
 
+    /*
     public Location find( Location loc ){
         return locations.stream()
             .filter( l -> l.equals(loc) )
             .findFirst().orElse(null);
     }
+    */
 
 
     public List<Location> findByParams( String name ,
         String nickname, String city
     ){
-        List<Location> locs;
+        List<Location> locs = repo.findAll();
         if( name != null && !name.isEmpty() ){
-            locs = locations.stream()
+            locs = locs.stream()
                 .filter( l -> l.getName()
                     .toLowerCase()
                     .indexOf( name.toLowerCase() ) > -1
@@ -73,7 +66,7 @@ public class LocationService implements IService<Location>{
             }
         }
         else if( nickname != null && !nickname.isEmpty() ){
-            locs = locations.stream()
+            locs = locs.stream()
                 .filter( l -> l.getNickname()
                     .toLowerCase()
                     .indexOf( nickname.toLowerCase() ) > -1
@@ -89,7 +82,7 @@ public class LocationService implements IService<Location>{
             }
         }
         else{
-            locs = locations.stream()
+            locs = locs.stream()
                 .filter( l -> l.getCity()
                     .toLowerCase()
                     .indexOf( city.toLowerCase() ) > -1
@@ -99,39 +92,24 @@ public class LocationService implements IService<Location>{
         return locs;
     }
 
-    @Override
+    //@Override
     public void create( Location location ){
-        Long newId = (long) (locations.size()+1);
-        location.setId( newId );
-        locations.add( location );
+        repo.save(location);
     }
 
-    @Override
+    //@Override
     public Boolean update( Location location ){
-        Location _loc = find( location );
-        if( _loc != null ){
-            if( !location.getName().isBlank() )
-                _loc.setName( location.getName() );
-            if( !location.getNickname().isBlank() )
-                _loc.setNickname( location.getNickname() );
-            if( !location.getAddress().isBlank() )
-                _loc.setAddress( location.getAddress() );
-            if( !location.getCity().isBlank() )
-                _loc.setCity( location.getCity() );
-            if( location.getState() != null )
-                _loc.setState( location.getState() );
-            if( !location.getCountry().isBlank() )
-                _loc.setCountry( location.getCountry() );
+        if( repo.existsById( location.getId() ) ){
+            repo.save(location);
             return true;
         }
         return false;
     }
 
-    @Override
+    //@Override
     public Boolean delete( Long id ){
-        Location loc = find(id);
-        if( loc != null ){
-            locations.remove( loc );
+        if( repo.existsById(id) ){
+            repo.deleteById(id);
             return true;
         }
         return false;

@@ -1,60 +1,49 @@
 package com.fatecrl.viagens.service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fatecrl.viagens.model.Customer;
-import com.fatecrl.viagens.model.Status;
+import com.fatecrl.viagens.repository.CustomerRepository;
 
 @Service
-public class CustomerService implements IService<Customer> {
+public class CustomerService /*implements IService<Customer>*/ {
 
-    private static List<Customer> customers = new ArrayList<Customer>();
+    @Autowired
+    private CustomerRepository repo;
 
     public CustomerService(){
-        //this is a "fake" customer
-        Customer customer = new Customer();
-        customer.setId(1L);
-        customer.setName("Alice");
-        customer.setLastname("Stern");
-        customer.setAddress("R. Min. Joao Mendes 177");
-        customer.setCity("Santos");
-        customer.setState("SP");
-        customer.setCountry("Brasil");
-        customer.setBirthDate( LocalDate.now().minusYears(25) );
-        customer.setLimitAmount(3000);
-        customer.setStatus( Status.ACTIVE );
-        customers.add(customer);
     }
 
-    @Override
+    //@Override
     public List<Customer> findAll(){
-        return customers;
+        return repo.findAll();
     }
 
-    @Override
-    public Customer find( Long id ){
-        return customers.stream()
-            .filter( c -> c.getId() == id )
-            .findFirst().orElse(null);
+    //@Override
+    public Optional<Customer> find( Long id ){
+        return repo.findById(id);
     }
 
+    /*
     public Customer find( Customer customer ){
         return customers.stream()
             .filter( c -> c.equals(customer) )
             .findFirst().orElse(null);
     }
+    */
 
     public List<Customer> findByParams(
         String name ,
         LocalDate birthDate
     ){
-        List<Customer> custs;
+        List<Customer> custs = repo.findAll();
         if( name != null && !name.isEmpty() ){
-            custs = customers.stream()
+            custs = custs.stream()
                 .filter( c -> c.getName()
                     .toLowerCase()
                     .indexOf( name.toLowerCase() ) > -1
@@ -69,7 +58,7 @@ public class CustomerService implements IService<Customer> {
             }
         }
         else{
-            custs = customers.stream()
+            custs = custs.stream()
                 .filter( c -> c.getBirthDate()
                     .equals( birthDate )
                 )
@@ -78,53 +67,34 @@ public class CustomerService implements IService<Customer> {
         return custs;
     }
 
-    @Override
+    //@Override
     public void create( Customer customer ){
-        Long newId = (long) (customers.size()+1);
-        customer.setId( newId );
-        customers.add( customer );
+        repo.save(customer);
     }
 
-    @Override
+    //@Override
     public Boolean update( Customer customer ){
-        Customer _cust = find( customer );
-        if( _cust != null ){
-            if( !customer.getName().isBlank() )
-                _cust.setName( customer.getName() );
-            if( !customer.getLastname().isBlank() )
-                _cust.setLastname( customer.getLastname() );
-            if( !customer.getAddress().isBlank() )
-                _cust.setAddress( customer.getAddress() );
-            if( !customer.getCity().isBlank() )
-                _cust.setCity( customer.getCity() );
-            if( customer.getState() != null )
-                _cust.setState( customer.getState() );
-            if( !customer.getCountry().isBlank() )
-                _cust.setCountry( customer.getCountry() );
-            if( customer.getBirthDate() != null )
-                _cust.setBirthDate( customer.getBirthDate() );
-            if( customer.getLimitAmount() != null )
-                _cust.setLimitAmount( customer.getLimitAmount() );
+        if( repo.existsById( customer.getId() ) ){
+            repo.save(customer);
             return true;
         }
         return false;
     }
 
     public Boolean updateStatus( Long id, Customer customer ){
-        Customer _cust = find( id );
-        if( _cust != null ){
+        Optional<Customer> _cust = repo.findById( id );
+        if( _cust.isPresent() ){
             if( customer.getStatus() != null )
-                _cust.setStatus( customer.getStatus() );
+                _cust.get().setStatus( customer.getStatus() );
             return true;
         }
         return false;
     }
 
-    @Override
+    //@Override
     public Boolean delete( Long id ){
-        Customer customer = find(id);
-        if( customer != null ){
-            customers.remove( customer );
+        if( repo.existsById(id) ){
+            repo.deleteById(id);
             return true;
         }
         return false;

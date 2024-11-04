@@ -16,11 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.fatecrl.viagens.model.Customer;
 import com.fatecrl.viagens.model.Travel;
 import com.fatecrl.viagens.service.TravelService;
-
-import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/travels")
@@ -36,7 +33,7 @@ public class TravelController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Travel> get( @PathVariable("id") Long id ){
-        Travel travel = travelService.find(id);
+        Travel travel = travelService.find(id).orElse(null);
 
         if( travel != null )
             return ResponseEntity.ok(travel);
@@ -67,12 +64,13 @@ public class TravelController {
         //return ResponseEntity.unprocessable()   (422)  (to do)
     }
 
-    @PatchMapping
-    public ResponseEntity<Travel> patch( @RequestBody Travel travel ){
-        if( travelService.updateDates(travel) )
-            return ResponseEntity.ok(
-                travelService.find(travel.getId())
-            );
+    @PatchMapping("/{id}")
+    public ResponseEntity<Travel> patch(
+        @PathVariable("id") Long id,
+        @RequestBody Travel travel
+    ){
+        if( travelService.updateDates(id, travel) )
+            return ResponseEntity.ok().build();
         return ResponseEntity.notFound().build();
     }
 

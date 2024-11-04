@@ -10,6 +10,9 @@ spring:
         hibernate:
             ddl-auto: update
         show-sql: true
+        properties:
+            hibernate:
+                format_sql: true
 server:
     servlet:
         contextPath: /api
