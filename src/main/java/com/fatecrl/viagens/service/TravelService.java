@@ -54,7 +54,7 @@ public class TravelService implements IService<Travel>{
     }
 
     public Boolean updateDates( Long id, Travel travel ){
-        Optional<Travel> _trav = repo.findById( travel.getId() );
+        Optional<Travel> _trav = repo.findById( id );
         if( _trav.isPresent() ){
             if( travel.getStartDateTime() != null )
                 _trav.get().setStartDateTime( travel.getStartDateTime() );

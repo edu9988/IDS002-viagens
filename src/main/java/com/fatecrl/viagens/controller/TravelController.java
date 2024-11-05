@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.fatecrl.viagens.dto.TravelDTO;
+import com.fatecrl.viagens.dto.TravelDatesDTO;
+import com.fatecrl.viagens.mapper.TravelMapper;
 import com.fatecrl.viagens.model.Travel;
 import com.fatecrl.viagens.service.TravelService;
 
@@ -26,41 +29,52 @@ public class TravelController {
     @Autowired
     private TravelService travelService;
 
+    @Autowired
+    private TravelMapper mapper;
+    
     @GetMapping
-    public ResponseEntity<List<Travel>> getAll(){
-        return ResponseEntity.ok(travelService.findAll());
+    public ResponseEntity<List<TravelDTO>> getAll(){
+        return ResponseEntity.ok(
+            mapper.toDTO( travelService.findAll() )
+        );
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Travel> get( @PathVariable("id") Long id ){
+    public ResponseEntity<TravelDTO> get( @PathVariable("id") Long id ){
         Travel travel = travelService.find(id).orElse(null);
 
         if( travel != null )
-            return ResponseEntity.ok(travel);
+            return ResponseEntity.ok(
+                mapper.toDTO( travel )
+            );
         return ResponseEntity.notFound().build();
     }
 
     @PostMapping
-    public ResponseEntity<Travel> create( @RequestBody Travel travel ){
-        travelService.create( travel );
+    public ResponseEntity<TravelDTO> create( @RequestBody TravelDTO dto ){
+        Travel entity = mapper.toEntity(dto);
+        travelService.create( entity );
         URI uri = ServletUriComponentsBuilder
             .fromCurrentRequest()
             .path("/{id}")
-            .buildAndExpand( travel.getId() )
+            .buildAndExpand( entity.getId() )
             .toUri();
-        return ResponseEntity.created( uri ).body( travel );
+        dto.setId( entity.getId() );
+        return ResponseEntity.created( uri ).body( dto );
         //return ResponseEntity.badRequest()            (400)  (to do)
         //return ResponseEntity.unprocessable()         (422)  (to do)
         //return ResponseEntity.internalServerError()   (500)  (to do)
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Travel> update(
+    public ResponseEntity<TravelDTO> update(
         @PathVariable("id") Long id,
-        @RequestBody Travel travel
+        @RequestBody TravelDTO dto
     ){
-        if( travelService.update( id , travel ) )
-            return ResponseEntity.ok(travel);
+        if( travelService.update( id , mapper.toEntity(dto) ) ){
+            dto.setId(id);
+            return ResponseEntity.ok(dto);
+        }
         
         return ResponseEntity.notFound().build();
         //return ResponseEntity.badRequest()      (400)  (to do)
@@ -68,17 +82,17 @@ public class TravelController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Travel> patch(
+    public ResponseEntity<TravelDTO> patch(
         @PathVariable("id") Long id,
-        @RequestBody Travel travel
+        @RequestBody TravelDatesDTO datesDTO
     ){
-        if( travelService.updateDates(id, travel) )
+        if( travelService.updateDates(id, mapper.toEntity(datesDTO)) )
             return ResponseEntity.ok().build();
         return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Travel> delete( @PathVariable("id") Long id ) {
+    public ResponseEntity<TravelDTO> delete( @PathVariable("id") Long id ) {
         if( travelService.delete(id) )
             return ResponseEntity.noContent().build();
         
