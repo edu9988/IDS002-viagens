@@ -18,8 +18,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.fatecrl.viagens.dto.CustomerDTO;
+import com.fatecrl.viagens.dto.CustomerStatusDTO;
+import com.fatecrl.viagens.mapper.CustomerMapper;
 import com.fatecrl.viagens.model.Customer;
 import com.fatecrl.viagens.service.CustomerService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/customers")
@@ -28,8 +33,11 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
+    @Autowired
+    private CustomerMapper mapper;
+
     @GetMapping
-    public ResponseEntity<List<Customer>> getAll(
+    public ResponseEntity<List<CustomerDTO>> getAll(
         @RequestParam(required = false) String name,
         @RequestParam(required = false) LocalDate birthDate
     ){
@@ -42,40 +50,44 @@ public class CustomerController {
             List<Customer> customers = customerService
                 .findByParams(name,birthDate);
             if( customers != null && customers.size() > 0 )
-                return ResponseEntity.ok(customers);
+                return ResponseEntity.ok( mapper.toDTO(customers) );
             return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity.ok(customerService.findAll());
+        return ResponseEntity.ok(
+            mapper.toDTO( customerService.findAll() )
+        );
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Customer> get( @PathVariable("id") Long id ){
+    public ResponseEntity<CustomerDTO> get( @PathVariable("id") Long id ){
         Customer customer = customerService.find(id).orElse(null);
 
         if( customer != null )
-            return ResponseEntity.ok(customer);
+            return ResponseEntity.ok( mapper.toDTO(customer) );
         return ResponseEntity.notFound().build();
     }
 
     @PostMapping
-    public ResponseEntity<Customer> create( @RequestBody Customer customer ){
-        customerService.create( customer );
+    public ResponseEntity<CustomerDTO> create( @Valid @RequestBody CustomerDTO dto ){
+        Customer entity = mapper.toEntity(dto);
+        customerService.create( entity );
         URI uri = ServletUriComponentsBuilder
             .fromCurrentRequest()
             .path("/{id}")
-            .buildAndExpand( customer.getId() )
+            .buildAndExpand(  entity.getId() )
             .toUri();
-        return ResponseEntity.created( uri ).body( customer );
+        dto.setId( entity.getId() );
+        return ResponseEntity.created( uri ).body( dto );
         //return ResponseEntity.badRequest()            (400)  (to do)
         //return ResponseEntity.unprocessable()         (422)  (to do)
         //return ResponseEntity.internalServerError()   (500)  (to do)
     }
 
     @PutMapping
-    public ResponseEntity<Customer> update( @RequestBody Customer customer ){
-        if( customerService.update(customer) )
-            return ResponseEntity.ok(customer);
+    public ResponseEntity<CustomerDTO> update( @RequestBody CustomerDTO dto ){
+        if( customerService.update( mapper.toEntity(dto) ) )
+            return ResponseEntity.ok(dto);
         
         return ResponseEntity.notFound().build();
         //return ResponseEntity.badRequest()      (400)  (to do)
@@ -83,20 +95,20 @@ public class CustomerController {
     }   
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Customer> patch(
+    public ResponseEntity<CustomerDTO> patch(
         @PathVariable("id") Long id,
-        @RequestBody Customer customer
+        @RequestBody CustomerStatusDTO statusDTO
     ){
         //System.out.println("id: "+customer.getId());
         //System.out.println("name: "+customer.getName());
         //System.out.println("status: "+customer.getStatus());
-        if( customerService.updateStatus(id,customer) )
+        if( customerService.updateStatus(id,mapper.toEntity(statusDTO)) )
             return ResponseEntity.ok().build();
         return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Customer> delete( @PathVariable("id") Long id ) {
+    public ResponseEntity<CustomerDTO> delete( @PathVariable("id") Long id ) {
         if( customerService.delete(id) )
             return ResponseEntity.noContent().build();
         
