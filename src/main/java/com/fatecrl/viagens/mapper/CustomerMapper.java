@@ -31,7 +31,6 @@ public class CustomerMapper {
 
     public Customer toEntity( CustomerStatusDTO statusDTO ){
         Customer c = new Customer();
-        // don't copy id
         c.setStatus(statusDTO.getStatus());
         return c;
     }

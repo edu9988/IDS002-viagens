@@ -73,8 +73,9 @@ public class CustomerService implements IService<Customer> {
     }
 
     @Override
-    public Boolean update( Customer customer ){
-        if( repo.existsById( customer.getId() ) ){
+    public Boolean update( Long id, Customer customer ){
+        if( repo.existsById( id ) ){
+            //customer.setId(id); //might need this
             repo.save(customer);
             return true;
         }

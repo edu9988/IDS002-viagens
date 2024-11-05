@@ -44,8 +44,9 @@ public class TravelService implements IService<Travel>{
     }
 
     @Override
-    public Boolean update( Travel travel ){
-        if( repo.existsById( travel.getId() ) ){
+    public Boolean update( Long id , Travel travel ){
+        if( repo.existsById( id ) ){
+            travel.setId(id);
             repo.save(travel);
             return true;
         }

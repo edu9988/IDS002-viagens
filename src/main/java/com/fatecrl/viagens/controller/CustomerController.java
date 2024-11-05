@@ -41,8 +41,8 @@ public class CustomerController {
         @RequestParam(required = false) String name,
         @RequestParam(required = false) LocalDate birthDate
     ){
-        System.out.println( "name: " + name );
-        System.out.println( "birthDate: " + birthDate );
+        //System.out.println( "name: " + name );
+        //System.out.println( "birthDate: " + birthDate );
 
         if( (name != null && !name.isEmpty()) ||
             (birthDate != null)
@@ -84,10 +84,15 @@ public class CustomerController {
         //return ResponseEntity.internalServerError()   (500)  (to do)
     }
 
-    @PutMapping
-    public ResponseEntity<CustomerDTO> update( @RequestBody CustomerDTO dto ){
-        if( customerService.update( mapper.toEntity(dto) ) )
+    @PutMapping("/{id}")
+    public ResponseEntity<CustomerDTO> update(
+        @PathVariable("id") Long id,
+        @RequestBody CustomerDTO dto
+    ){
+        if( customerService.update( id , mapper.toEntity(dto) ) ){
+            dto.setId(id);
             return ResponseEntity.ok(dto);
+        }
         
         return ResponseEntity.notFound().build();
         //return ResponseEntity.badRequest()      (400)  (to do)

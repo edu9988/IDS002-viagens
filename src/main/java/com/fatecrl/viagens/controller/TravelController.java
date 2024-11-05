@@ -54,9 +54,12 @@ public class TravelController {
         //return ResponseEntity.internalServerError()   (500)  (to do)
     }
 
-    @PutMapping
-    public ResponseEntity<Travel> update( @RequestBody Travel travel ){
-        if( travelService.update(travel) )
+    @PutMapping("/{id}")
+    public ResponseEntity<Travel> update(
+        @PathVariable("id") Long id,
+        @RequestBody Travel travel
+    ){
+        if( travelService.update( id , travel ) )
             return ResponseEntity.ok(travel);
         
         return ResponseEntity.notFound().build();

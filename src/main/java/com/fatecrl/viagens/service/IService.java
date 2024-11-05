@@ -8,7 +8,7 @@ public interface IService<T> {
     List<T> findAll();
     Optional<T> find( Long id );
     void create( T obj );
-    Boolean update( T obj );
+    Boolean update( Long id , T obj );
     Boolean delete( Long id );
     
 }
