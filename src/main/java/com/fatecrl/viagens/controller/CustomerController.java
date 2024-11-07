@@ -36,7 +36,15 @@ public class CustomerController {
     @Autowired
     private CustomerMapper mapper;
 
-    @GetMapping
+    @GetMapping(produces="application/json")
+    /*@ApiResponses(value = {
+        @ApiResponse(responseCode = "200",
+        description = "Retorna a lista de categorias"),
+        @ApiResponse(responseCode = "403",
+        description = "Você não tem permissão para acessar este recurso"),
+        @ApiResponse(responseCode = "500",
+        description = "Erro interno do sistema"),
+    })*/
     public ResponseEntity<List<CustomerDTO>> getAll(
         @RequestParam(required = false) String name,
         @RequestParam(required = false) LocalDate birthDate
@@ -59,7 +67,7 @@ public class CustomerController {
         );
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(value="/{id}", produces="application/json")
     public ResponseEntity<CustomerDTO> get( @PathVariable("id") Long id ){
         Customer customer = customerService.find(id).orElse(null);
 
@@ -68,7 +76,7 @@ public class CustomerController {
         return ResponseEntity.notFound().build();
     }
 
-    @PostMapping
+    @PostMapping(produces="application/json")
     public ResponseEntity<CustomerDTO> create( @Valid @RequestBody CustomerDTO dto ){
         Customer entity = mapper.toEntity(dto);
         customerService.create( entity );
@@ -84,7 +92,7 @@ public class CustomerController {
         //return ResponseEntity.internalServerError()   (500)  (to do)
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(value="/{id}", produces="application/json")
     public ResponseEntity<CustomerDTO> update(
         @PathVariable("id") Long id,
         @RequestBody CustomerDTO dto
