@@ -102,7 +102,7 @@ public class CustomerController {
     @PatchMapping("/{id}")
     public ResponseEntity<CustomerDTO> patch(
         @PathVariable("id") Long id,
-        @RequestBody CustomerStatusDTO statusDTO
+        @Valid @RequestBody CustomerStatusDTO statusDTO
     ){
         //System.out.println("id: "+customer.getId());
         //System.out.println("name: "+customer.getName());
