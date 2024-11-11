@@ -28,68 +28,38 @@ public class LocationService implements IService<Location>{
         return repo.findById(id);
     }
 
-    /*
-    public Location find( Location loc ){
-        return locations.stream()
-            .filter( l -> l.equals(loc) )
-            .findFirst().orElse(null);
-    }
-    */
-
-
-    public List<Location> findByParams( String name ,
-        String nickname, String city
+    public List<Location> findByParams(
+        String name ,
+        String nickname,
+        String city
     ){
-        List<Location> locs = repo.findAll();
-        if( name != null && !name.isEmpty() ){
-            locs = locs.stream()
-                .filter( l -> l.getName()
-                    .toLowerCase()
-                    .indexOf( name.toLowerCase() ) > -1
-                )
-                .toList();
-            if( nickname != null && !nickname.isEmpty() ){
-                locs = locs.stream()
-                    .filter( l -> l.getNickname()
-                        .toLowerCase()
-                        .indexOf( nickname.toLowerCase() ) > -1
-                    )
-                    .toList();
-                if( city != null && !city.isEmpty() ){
-                    locs = locs.stream()
-                        .filter( l -> l.getCity()
-                            .toLowerCase()
-                            .indexOf( city.toLowerCase() ) > -1
-                        )
-                        .toList();
-                }
-            }
+        List<Location> locations;
+        if( name == null || name.isEmpty() ){
+            if( nickname == null || nickname.isEmpty() )
+                locations = repo.findByCityContaining( city );
+            else if( city == null || city.isEmpty() )
+                locations = repo.findByNicknameContaining( nickname );
+            else /* nickname and city != null */
+                locations = repo.findByNicknameContainingAndCityContaining( nickname , city );
         }
-        else if( nickname != null && !nickname.isEmpty() ){
-            locs = locs.stream()
-                .filter( l -> l.getNickname()
-                    .toLowerCase()
-                    .indexOf( nickname.toLowerCase() ) > -1
-                )
-                .toList();
-            if( city != null && !city.isEmpty() ){
-                locs = locs.stream()
-                    .filter( l -> l.getCity()
-                        .toLowerCase()
-                        .indexOf( city.toLowerCase() ) > -1
-                    )
-                    .toList();
-            }
+        else if( nickname == null || nickname.isEmpty() ){
+            if( name == null || name.isEmpty() )
+                locations = repo.findByCityContaining( city );
+            else if( city == null || city.isEmpty() )
+                locations = repo.findByNameContaining( name );
+            else /* name and city != null */
+                locations = repo.findByNameContainingAndCityContaining( name , city );
         }
-        else{
-            locs = locs.stream()
-                .filter( l -> l.getCity()
-                    .toLowerCase()
-                    .indexOf( city.toLowerCase() ) > -1
-                )
-                .toList();
+        else /* city == null || city.isEmpty() */{
+            if( name == null || name.isEmpty() )
+                locations = repo.findByNicknameContaining( nickname );
+            else if( nickname == null || nickname.isEmpty() )
+                locations = repo.findByNameContaining( name );
+            else /* name and nickname != null */
+                locations = repo.findByNameContainingAndNicknameContaining( name , nickname );
         }
-        return locs;
+        
+        return locations;
     }
 
     @Override
