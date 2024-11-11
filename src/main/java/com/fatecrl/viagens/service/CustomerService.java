@@ -29,42 +29,21 @@ public class CustomerService implements IService<Customer> {
         return repo.findById(id);
     }
 
-    /*
-    public Customer find( Customer customer ){
-        return customers.stream()
-            .filter( c -> c.equals(customer) )
-            .findFirst().orElse(null);
-    }
-    */
-
     public List<Customer> findByParams(
         String name ,
         LocalDate birthDate
     ){
-        List<Customer> custs = repo.findAll();
-        if( name != null && !name.isEmpty() ){
-            custs = custs.stream()
-                .filter( c -> c.getName()
-                    .toLowerCase()
-                    .indexOf( name.toLowerCase() ) > -1
-                )
-                .toList();
-            if( birthDate != null ){
-                custs = custs.stream()
-                    .filter( c -> c.getBirthDate()
-                        .equals( birthDate )
-                    )
-                    .toList();
-            }
-        }
-        else{
-            custs = custs.stream()
-                .filter( c -> c.getBirthDate()
-                    .equals( birthDate )
-                )
-                .toList();
-        }
-        return custs;
+        List<Customer> customers;
+        if( name ==  null || name.isEmpty() )
+            customers = repo
+                .findByBirthDate(birthDate);
+        else if( birthDate == null )
+            customers = repo
+                .findByNameContaining(name);
+        else
+            customers = repo
+                .findByNameContainingAndBirthDate(name, birthDate);
+        return customers;
     }
 
     @Override

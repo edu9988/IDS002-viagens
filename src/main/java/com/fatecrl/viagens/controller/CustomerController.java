@@ -5,7 +5,9 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fatecrl.viagens.dto.CustomerDTO;
 import com.fatecrl.viagens.dto.CustomerStatusDTO;
 import com.fatecrl.viagens.mapper.CustomerMapper;
@@ -53,10 +56,10 @@ public class CustomerController {
         //System.out.println( "birthDate: " + birthDate );
 
         if( (name != null && !name.isEmpty()) ||
-            (birthDate != null)
+            (birthDate != null )
         ){
             List<Customer> customers = customerService
-                .findByParams(name,birthDate);
+                .findByParams(name, birthDate);
             if( customers != null && customers.size() > 0 )
                 return ResponseEntity.ok( mapper.toDTO(customers) );
             return ResponseEntity.notFound().build();
@@ -85,8 +88,7 @@ public class CustomerController {
             .path("/{id}")
             .buildAndExpand(  entity.getId() )
             .toUri();
-        dto.setId( entity.getId() );
-        return ResponseEntity.created( uri ).body( dto );
+        return ResponseEntity.created( uri ).build();
         //return ResponseEntity.badRequest()            (400)  (to do)
         //return ResponseEntity.unprocessable()         (422)  (to do)
         //return ResponseEntity.internalServerError()   (500)  (to do)
@@ -99,7 +101,7 @@ public class CustomerController {
     ){
         if( customerService.update( id , mapper.toEntity(dto) ) ){
             dto.setId(id);
-            return ResponseEntity.ok(dto);
+            return ResponseEntity.ok().build();
         }
         
         return ResponseEntity.notFound().build();

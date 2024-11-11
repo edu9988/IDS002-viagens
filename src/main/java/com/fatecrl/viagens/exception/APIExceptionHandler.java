@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +38,25 @@ public class APIExceptionHandler extends ResponseEntityExceptionHandler{
         
         return super.handleExceptionInternal(ex, err, headers, status, request);
     }
+
+    /*
+    @Nullable
+    @Override
+	protected ResponseEntity<Object> handleTypeMismatch(
+        TypeMismatchException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+
+        APIError err = new APIError();
+
+        err.setStatus( status.value() );
+        err.setTime( LocalDateTime.now() );
+        err.setPath( ((ServletWebRequest) request).getRequest().getRequestURI().toString() );
+        err.setMessage("One or more fields invalid");
+        List<ErrorField> ls = new ArrayList<ErrorField>();
+        ls.add(new ErrorField("message",ex.getMessage()));
+        err.setFields( ls );
+        
+        return super.handleExceptionInternal(ex, err, headers, status, request);
+	}*/
 
     private List<ErrorField> retrieveErrorFields(
         MethodArgumentNotValidException ex

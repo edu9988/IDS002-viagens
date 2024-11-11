@@ -1,7 +1,9 @@
 package com.fatecrl.viagens.mapper;
 
+import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.dao.TypeMismatchDataAccessException;
 import org.springframework.stereotype.Component;
 
 import com.fatecrl.viagens.dto.CustomerDTO;
@@ -50,17 +52,19 @@ public class CustomerMapper {
         );
     }
 
-    /* unnecessary?
-    public List<Customer> toEntity( List<CustomerDTO> dtos ){
-        return dtos.stream().map(
-            dto -> toEntity(dto)
-        ).toList();
-    }
-    */
-
     public List<CustomerDTO> toDTO( List<Customer> cs ){
         return cs.stream().map(
             c -> toDTO(c)
         ).toList();
+    }
+
+    public LocalDate toLocalDate( String date ){
+        if( date.length() != 10
+            || date.charAt(4) != '-'
+            || date.charAt(7) != '-'
+        )
+            throw new TypeMismatchDataAccessException( "date must be in format YYYY-MM-DD"); 
+        LocalDate ld = LocalDate.parse( date );
+        return ld;
     }
 }
