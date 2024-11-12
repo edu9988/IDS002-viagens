@@ -18,7 +18,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.fatecrl.viagens.dto.TravelDTO;
 import com.fatecrl.viagens.dto.TravelDatesDTO;
+import com.fatecrl.viagens.exception.ResourceNotFoundException;
 import com.fatecrl.viagens.mapper.TravelMapper;
+import com.fatecrl.viagens.model.Customer;
+import com.fatecrl.viagens.model.Location;
 import com.fatecrl.viagens.model.Travel;
 import com.fatecrl.viagens.service.TravelService;
 
@@ -52,7 +55,38 @@ public class TravelController {
 
     @PostMapping
     public ResponseEntity<TravelDTO> create( @RequestBody TravelDTO dto ){
-        Travel entity = mapper.toEntity(dto);
+
+        Customer customerEntity = travelService
+            .findCustomer( dto.getCustomer() )
+            .orElseThrow(()->new ResourceNotFoundException(
+                "Customer with ID "
+                + dto.getCustomer()
+                + " does not exist"
+            ));
+
+        Location sourceEntity = travelService
+            .findLocation( dto.getSource() )
+            .orElseThrow(()->new ResourceNotFoundException(
+                "Location with ID "
+                + dto.getSource()
+                + " (source) does not exist"
+            ));
+
+        Location destinationEntity = travelService
+        .findLocation( dto.getDestination() )
+        .orElseThrow(()->new ResourceNotFoundException(
+            "Location with ID "
+            + dto.getDestination()
+            + " (destination) does not exist"
+        ));
+
+        Travel entity = mapper.toEntity(
+            dto,
+            customerEntity,
+            sourceEntity,
+            destinationEntity
+        );
+
         travelService.create( entity );
         URI uri = ServletUriComponentsBuilder
             .fromCurrentRequest()
@@ -71,7 +105,38 @@ public class TravelController {
         @PathVariable("id") Long id,
         @RequestBody TravelDTO dto
     ){
-        if( travelService.update( id , mapper.toEntity(dto) ) ){
+        Customer customerEntity = travelService
+            .findCustomer( dto.getCustomer() )
+            .orElseThrow(()->new ResourceNotFoundException(
+                "Customer with ID "
+                + dto.getCustomer()
+                + " does not exist"
+            ));
+
+        Location sourceEntity = travelService
+            .findLocation( dto.getSource() )
+            .orElseThrow(()->new ResourceNotFoundException(
+                "Location with ID "
+                + dto.getSource()
+                + " (source) does not exist"
+            ));
+
+        Location destinationEntity = travelService
+        .findLocation( dto.getDestination() )
+        .orElseThrow(()->new ResourceNotFoundException(
+            "Location with ID "
+            + dto.getDestination()
+            + " (destination) does not exist"
+        ));
+
+        Travel entity = mapper.toEntity(
+            dto,
+            customerEntity,
+            sourceEntity,
+            destinationEntity
+        );
+        
+        if( travelService.update( id , entity ) ){
             dto.setId(id);
             return ResponseEntity.ok(dto);
         }

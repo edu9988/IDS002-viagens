@@ -7,5 +7,5 @@ import com.fatecrl.viagens.model.Travel;
 
 @Repository
 public interface TravelRepository extends JpaRepository<Travel , Long>{
-
+    
 }

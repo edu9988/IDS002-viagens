@@ -6,7 +6,11 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fatecrl.viagens.model.Customer;
+import com.fatecrl.viagens.model.Location;
 import com.fatecrl.viagens.model.Travel;
+import com.fatecrl.viagens.repository.CustomerRepository;
+import com.fatecrl.viagens.repository.LocationRepository;
 import com.fatecrl.viagens.repository.TravelRepository;
 
 @Service
@@ -14,6 +18,12 @@ public class TravelService implements IService<Travel>{
 
     @Autowired
     private TravelRepository repo;
+
+    @Autowired
+    private CustomerRepository customerRepo;
+
+    @Autowired
+    private LocationRepository locationRepo;
 
     public TravelService(){
     }
@@ -28,13 +38,13 @@ public class TravelService implements IService<Travel>{
         return repo.findById(id);
     }
 
-    /*
-    public Travel find( Travel travel ){
-        return travels.stream()
-            .filter( t -> t.equals(travel) )
-            .findFirst().orElse(null);
+    public Optional<Customer> findCustomer( Long id ){
+        return customerRepo.findById( id );
     }
-    */
+
+    public Optional<Location> findLocation( Long id ){
+        return locationRepo.findById( id );
+    }
 
     @Override
     public void create( Travel travel ){

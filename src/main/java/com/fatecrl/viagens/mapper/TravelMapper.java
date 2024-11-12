@@ -6,6 +6,8 @@ import org.springframework.stereotype.Component;
 
 import com.fatecrl.viagens.dto.TravelDTO;
 import com.fatecrl.viagens.dto.TravelDatesDTO;
+import com.fatecrl.viagens.model.Customer;
+import com.fatecrl.viagens.model.Location;
 import com.fatecrl.viagens.model.Travel;
 
 import lombok.NoArgsConstructor;
@@ -14,14 +16,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TravelMapper {
 
-    public Travel toEntity( TravelDTO dto ){
+    public Travel toEntity(
+        TravelDTO dto,
+        Customer c,
+        Location source,
+        Location destination
+    ){
         Travel t = new Travel();
         t.setAmount(dto.getAmount());
-        t.setCustomer(dto.getCustomer());
-        t.setDestination(dto.getDestination());
+        t.setCustomer(c);
+        t.setDestination(destination);
         t.setEndDateTime(dto.getEndDateTime());
         t.setOrderNumber(dto.getOrderNumber());
-        t.setSource(dto.getSource());
+        t.setSource(source);
         t.setStartDateTime(dto.getStartDateTime());
         t.setType(dto.getType());
         return t;
@@ -39,12 +46,12 @@ public class TravelMapper {
             t.getId(),
             t.getOrderNumber(),
             t.getAmount(),
-            t.getSource(),
-            t.getDestination(),
+            t.getSource().getId(),
+            t.getDestination().getId(),
             t.getStartDateTime(),
             t.getEndDateTime(),
             t.getType(),
-            t.getCustomer()
+            t.getCustomer().getId()
         );
     }
 
