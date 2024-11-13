@@ -2,9 +2,7 @@ package com.fatecrl.viagens.exception;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpHeaders;
@@ -77,9 +75,13 @@ public class APIExceptionHandler extends ResponseEntityExceptionHandler{
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<Object> handleResourceNotFoundException(ResourceNotFoundException ex) {
-        Map<String, String> errorResponse = new HashMap<>();
-        errorResponse.put("error", ex.getMessage());
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        ResourceError err = new ResourceError();
+        err.setStatus( 400 );
+        err.setTime( LocalDateTime.now() );
+        err.setPath( ex.getPath() );
+        err.setMessage(ex.getMessage());
+
+        return new ResponseEntity<>(err, HttpStatus.BAD_REQUEST);
     }
 
 }

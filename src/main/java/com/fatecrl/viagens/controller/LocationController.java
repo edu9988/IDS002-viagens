@@ -37,10 +37,6 @@ public class LocationController {
         @RequestParam(required=false) String nickname,
         @RequestParam(required=false) String city
     ){
-        //System.out.println( "name: " + name );
-        //System.out.println( "nickname: " + nickname );
-        //System.out.println( "city: " + city );
-
         if( (name != null && !name.isEmpty()) ||
             (nickname != null && !nickname.isEmpty()) ||
             (city != null && !city.isEmpty())

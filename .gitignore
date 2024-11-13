@@ -1,6 +1,5 @@
-curl_http_req.bash
 curl_json_body.txt
-populate.bash
+*.bash
 notes/
 
 /target/

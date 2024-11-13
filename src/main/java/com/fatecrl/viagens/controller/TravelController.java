@@ -25,6 +25,8 @@ import com.fatecrl.viagens.model.Location;
 import com.fatecrl.viagens.model.Travel;
 import com.fatecrl.viagens.service.TravelService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/travels")
 public class TravelController {
@@ -54,11 +56,12 @@ public class TravelController {
     }
 
     @PostMapping
-    public ResponseEntity<TravelDTO> create( @RequestBody TravelDTO dto ){
+    public ResponseEntity<TravelDTO> create( @Valid @RequestBody TravelDTO dto ){
 
         Customer customerEntity = travelService
             .findCustomer( dto.getCustomer() )
             .orElseThrow(()->new ResourceNotFoundException(
+                "/api/travels",
                 "Customer with ID "
                 + dto.getCustomer()
                 + " does not exist"
@@ -67,6 +70,7 @@ public class TravelController {
         Location sourceEntity = travelService
             .findLocation( dto.getSource() )
             .orElseThrow(()->new ResourceNotFoundException(
+                "/api/travels",
                 "Location with ID "
                 + dto.getSource()
                 + " (source) does not exist"
@@ -75,6 +79,7 @@ public class TravelController {
         Location destinationEntity = travelService
         .findLocation( dto.getDestination() )
         .orElseThrow(()->new ResourceNotFoundException(
+            "/api/travels",
             "Location with ID "
             + dto.getDestination()
             + " (destination) does not exist"
@@ -108,6 +113,7 @@ public class TravelController {
         Customer customerEntity = travelService
             .findCustomer( dto.getCustomer() )
             .orElseThrow(()->new ResourceNotFoundException(
+                "/api/travels/"+id,
                 "Customer with ID "
                 + dto.getCustomer()
                 + " does not exist"
@@ -116,17 +122,19 @@ public class TravelController {
         Location sourceEntity = travelService
             .findLocation( dto.getSource() )
             .orElseThrow(()->new ResourceNotFoundException(
+                "/api/travels/"+id,
                 "Location with ID "
                 + dto.getSource()
                 + " (source) does not exist"
             ));
 
         Location destinationEntity = travelService
-        .findLocation( dto.getDestination() )
-        .orElseThrow(()->new ResourceNotFoundException(
-            "Location with ID "
-            + dto.getDestination()
-            + " (destination) does not exist"
+            .findLocation( dto.getDestination() )
+            .orElseThrow(()->new ResourceNotFoundException(
+                "/api/travels/"+id,
+                "Location with ID "
+                + dto.getDestination()
+                + " (destination) does not exist"
         ));
 
         Travel entity = mapper.toEntity(
