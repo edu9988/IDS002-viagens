@@ -175,11 +175,7 @@ public class TravelService implements IService<Travel>{
     }
 
     @Override
-    public Boolean delete( Long id ){
-        if( repo.existsById(id) ){
-            repo.deleteById(id);
-            return true;
-        }
-        return false;
+    public void delete( Long id ){
+        repo.deleteById(id);
     }
 }

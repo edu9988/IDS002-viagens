@@ -9,6 +9,6 @@ public interface IService<T> {
     Optional<T> find( Long id );
     void create( T obj );
     void update( Long id , T obj );
-    Boolean delete( Long id );
+    void delete( Long id );
     
 }

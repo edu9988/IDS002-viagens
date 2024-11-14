@@ -213,9 +213,9 @@ public class TravelController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<TravelDTO> delete( @PathVariable("id") Long id ) {
-        if( travelService.delete(id) )
-            return ResponseEntity.noContent().build();
-        
-        return ResponseEntity.notFound().build();
+        if( !travelService.travelExists(id) )
+            return ResponseEntity.notFound().build();
+        travelService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

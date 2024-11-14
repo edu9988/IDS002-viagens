@@ -8,13 +8,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fatecrl.viagens.model.Customer;
+import com.fatecrl.viagens.model.Location;
 import com.fatecrl.viagens.repository.CustomerRepository;
+import com.fatecrl.viagens.repository.TravelRepository;
 
 @Service
 public class CustomerService implements IService<Customer> {
 
     @Autowired
     private CustomerRepository repo;
+
+    @Autowired
+    private TravelRepository travelRepo;
 
     public CustomerService(){
     }
@@ -71,12 +76,13 @@ public class CustomerService implements IService<Customer> {
         return false;
     }
 
+    public Boolean referencedBySomeTravel( Long id ){
+        Customer target = repo.findById(id).orElse(null);
+        return travelRepo.existsByCustomer( target );
+    }
+
     @Override
-    public Boolean delete( Long id ){
-        if( repo.existsById(id) ){
-            repo.deleteById(id);
-            return true;
-        }
-        return false;
+    public void delete( Long id ){
+        repo.deleteById(id);
     }
 }

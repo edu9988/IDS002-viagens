@@ -21,6 +21,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.fatecrl.viagens.dto.CustomerDTO;
 import com.fatecrl.viagens.dto.CustomerStatusDTO;
+import com.fatecrl.viagens.exception.ResourceNotFoundException;
 import com.fatecrl.viagens.mapper.CustomerMapper;
 import com.fatecrl.viagens.model.Customer;
 import com.fatecrl.viagens.service.CustomerService;
@@ -116,9 +117,17 @@ public class CustomerController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<CustomerDTO> delete( @PathVariable("id") Long id ) {
-        if( customerService.delete(id) )
-            return ResponseEntity.noContent().build();
-        
-        return ResponseEntity.notFound().build();
+        if( !customerService.customerExists(id ))
+            return ResponseEntity.notFound().build();
+        if( customerService.referencedBySomeTravel( id ) )
+            throw new ResourceNotFoundException(
+                "/api/customers/"+id,
+                "Customer with ID "
+                + id
+                + " is referenced by some travel"
+            );
+
+        customerService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

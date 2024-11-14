@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.fatecrl.viagens.dto.LocationDTO;
+import com.fatecrl.viagens.exception.ResourceNotFoundException;
 import com.fatecrl.viagens.mapper.LocationMapper;
 import com.fatecrl.viagens.model.Location;
 import com.fatecrl.viagens.service.LocationService;
@@ -99,9 +100,18 @@ public class LocationController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<LocationDTO> delete( @PathVariable("id") Long id ) {
-        if( locService.delete(id) )
-            return ResponseEntity.noContent().build();
+        if( !locService.locationExists(id) )
+            return ResponseEntity.notFound().build();
+        if( locService.referencedBySomeTravel( id ) )
+            throw new ResourceNotFoundException(
+                "/api/locations/"+id,
+                "Location with ID "
+                + id
+                + " is referenced by some travel"
+            );
+            
+        locService.delete(id);
+        return ResponseEntity.noContent().build();
         
-        return ResponseEntity.notFound().build();
     }
 }

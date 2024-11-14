@@ -8,12 +8,16 @@ import org.springframework.stereotype.Service;
 
 import com.fatecrl.viagens.model.Location;
 import com.fatecrl.viagens.repository.LocationRepository;
+import com.fatecrl.viagens.repository.TravelRepository;
 
 @Service
 public class LocationService implements IService<Location>{
 
     @Autowired
     private LocationRepository repo;
+
+    @Autowired
+    private TravelRepository travelRepo;
 
     public LocationService(){
     }
@@ -77,12 +81,14 @@ public class LocationService implements IService<Location>{
         repo.save(location);
     }
 
+    public Boolean referencedBySomeTravel( Long id ){
+        Location target = repo.findById(id).orElse(null);
+        return travelRepo.existsBySource( target )
+            || travelRepo.existsByDestination( target );
+    }
+
     @Override
-    public Boolean delete( Long id ){
-        if( repo.existsById(id) ){
-            repo.deleteById(id);
-            return true;
-        }
-        return false;
+    public void delete( Long id ){
+        repo.deleteById(id);
     }
 }
