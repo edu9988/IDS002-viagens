@@ -67,14 +67,14 @@ public class LocationService implements IService<Location>{
         repo.save(location);
     }
 
+    public Boolean locationExists( Long id ){
+        return repo.existsById(id);
+    }
+    
     @Override
-    public Boolean update( Long id , Location location ){
-        if( repo.existsById( id ) ){
-            location.setId(id);
-            repo.save(location);
-            return true;
-        }
-        return false;
+    public void update( Long id , Location location ){
+        location.setId(id);
+        repo.save(location);
     }
 
     @Override

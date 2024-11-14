@@ -92,6 +92,28 @@ public class TravelController {
             destinationEntity
         );
 
+        if( travelService.hasNoFunds(
+            customerEntity.getId(),
+            entity.getAmount()
+        ))
+            throw new ResourceNotFoundException(
+                "/api/travels",
+                "Not enough funds for customer with ID "
+                + customerEntity.getId()
+            );
+
+        if( travelService.hasConflictingDates(
+            customerEntity,
+            entity.getStartDateTime(),
+            entity.getEndDateTime()
+        ))
+            throw new ResourceNotFoundException(
+                "/api/travels",
+                "Customer with ID "
+                + customerEntity.getId()
+                + " has other travels with overlapping dates"
+            );
+
         travelService.create( entity );
         URI uri = ServletUriComponentsBuilder
             .fromCurrentRequest()
@@ -100,7 +122,7 @@ public class TravelController {
             .toUri();
         dto.setId( entity.getId() );
         return ResponseEntity.created( uri ).body( dto );
-        //return ResponseEntity.badRequest()            (400)  (to do)
+
         //return ResponseEntity.unprocessable()         (422)  (to do)
         //return ResponseEntity.internalServerError()   (500)  (to do)
     }
@@ -110,6 +132,9 @@ public class TravelController {
         @PathVariable("id") Long id,
         @RequestBody TravelDTO dto
     ){
+        if( !travelService.travelExists( id ) )
+            return ResponseEntity.notFound().build();
+
         Customer customerEntity = travelService
             .findCustomer( dto.getCustomer() )
             .orElseThrow(()->new ResourceNotFoundException(
@@ -143,13 +168,35 @@ public class TravelController {
             sourceEntity,
             destinationEntity
         );
-        
-        if( travelService.update( id , entity ) ){
-            dto.setId(id);
-            return ResponseEntity.ok(dto);
-        }
-        
-        return ResponseEntity.notFound().build();
+
+        if( travelService.hasNoFunds(
+            customerEntity.getId(),
+            entity.getAmount(),
+            id
+        ))
+            throw new ResourceNotFoundException(
+                "/api/travels",
+                "Not enough funds for customer with ID "
+                + customerEntity.getId()
+            );
+
+        if( travelService.hasConflictingDates(
+            customerEntity,
+            entity.getStartDateTime(),
+            entity.getEndDateTime(),
+            id
+        ))
+            throw new ResourceNotFoundException(
+                "/api/travels",
+                "Customer with ID "
+                + customerEntity.getId()
+                + " has other travels with overlapping dates"
+            );
+
+        travelService.update( id , entity );
+        dto.setId(id);
+        return ResponseEntity.ok(dto);
+    
         //return ResponseEntity.badRequest()      (400)  (to do)
         //return ResponseEntity.unprocessable()   (422)  (to do)
     }

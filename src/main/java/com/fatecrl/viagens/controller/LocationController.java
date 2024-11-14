@@ -87,12 +87,12 @@ public class LocationController {
         @PathVariable("id") Long id,
         @RequestBody LocationDTO dto
     ){
-        if( locService.update( id , mapper.toEntity(dto) ) ){
-            dto.setId(id);
-            return ResponseEntity.ok(dto);
-        }
-        
-        return ResponseEntity.notFound().build();
+        if( !locService.locationExists(id) )
+            return ResponseEntity.notFound().build();
+
+        locService.update( id , mapper.toEntity(dto) );
+        dto.setId(id);
+        return ResponseEntity.ok(dto);
         //return ResponseEntity.badRequest()      (400)  (to do)
         //return ResponseEntity.unprocessable()   (422)  (to do)
     }

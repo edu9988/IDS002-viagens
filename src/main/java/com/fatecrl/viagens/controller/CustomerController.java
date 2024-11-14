@@ -50,9 +50,6 @@ public class CustomerController {
         @RequestParam(required = false) String name,
         @RequestParam(required = false) LocalDate birthDate
     ){
-        //System.out.println( "name: " + name );
-        //System.out.println( "birthDate: " + birthDate );
-
         if( (name != null && !name.isEmpty()) ||
             (birthDate != null )
         ){
@@ -97,12 +94,12 @@ public class CustomerController {
         @PathVariable("id") Long id,
         @RequestBody CustomerDTO dto
     ){
-        if( customerService.update( id , mapper.toEntity(dto) ) ){
-            dto.setId(id);
-            return ResponseEntity.ok().build();
-        }
-        
-        return ResponseEntity.notFound().build();
+        if( !customerService.customerExists(id) )
+            return ResponseEntity.notFound().build();
+
+        customerService.update( id , mapper.toEntity(dto) );
+        dto.setId(id);
+        return ResponseEntity.ok().build();
         //return ResponseEntity.badRequest()      (400)  (to do)
         //return ResponseEntity.unprocessable()   (422)  (to do)
     }   
@@ -112,9 +109,6 @@ public class CustomerController {
         @PathVariable("id") Long id,
         @Valid @RequestBody CustomerStatusDTO statusDTO
     ){
-        //System.out.println("id: "+customer.getId());
-        //System.out.println("name: "+customer.getName());
-        //System.out.println("status: "+customer.getStatus());
         if( customerService.updateStatus(id,mapper.toEntity(statusDTO)) )
             return ResponseEntity.ok().build();
         return ResponseEntity.notFound().build();

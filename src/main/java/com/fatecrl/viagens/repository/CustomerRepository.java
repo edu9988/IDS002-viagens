@@ -15,4 +15,5 @@ public interface CustomerRepository extends JpaRepository<Customer , Long>{
     List<Customer> findByNameContaining( String name );
     List<Customer> findByBirthDate( LocalDate birthDate );
     List<Customer> findByNameContainingAndBirthDate( String name, LocalDate birthDate );
+
 }
