@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -15,10 +14,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import io.micrometer.common.lang.NonNull;
 import jakarta.annotation.Nullable;
 
 @RestControllerAdvice
@@ -85,6 +82,17 @@ public class APIExceptionHandler extends ResponseEntityExceptionHandler{
         err.setMessage(ex.getMessage());
 
         return new ResponseEntity<>(err, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InvalidArgumentException.class)
+    public ResponseEntity<Object> handleInvalidArgumentException(InvalidArgumentException ex) {
+        ResourceError err = new ResourceError();
+        err.setStatus( 422 );
+        err.setTime( LocalDateTime.now() );
+        err.setPath( ex.getPath() );
+        err.setMessage(ex.getMessage());
+
+        return new ResponseEntity<>(err, HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
 }

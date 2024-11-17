@@ -18,6 +18,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.fatecrl.viagens.dto.TravelDTO;
 import com.fatecrl.viagens.dto.TravelDatesDTO;
+import com.fatecrl.viagens.exception.InvalidArgumentException;
 import com.fatecrl.viagens.exception.ResourceNotFoundException;
 import com.fatecrl.viagens.mapper.TravelMapper;
 import com.fatecrl.viagens.model.Customer;
@@ -96,7 +97,7 @@ public class TravelController {
             customerEntity.getId(),
             entity.getAmount()
         ))
-            throw new ResourceNotFoundException(
+            throw new InvalidArgumentException(
                 "/api/travels",
                 "Not enough funds for customer with ID "
                 + customerEntity.getId()
@@ -107,11 +108,27 @@ public class TravelController {
             entity.getStartDateTime(),
             entity.getEndDateTime()
         ))
-            throw new ResourceNotFoundException(
+            throw new InvalidArgumentException(
                 "/api/travels",
                 "Customer with ID "
                 + customerEntity.getId()
                 + " has other travels with overlapping dates"
+            );
+
+        if(
+            entity.getStartDateTime().isAfter(entity.getEndDateTime())
+        )
+            throw new InvalidArgumentException(
+                "/api/travels",
+                "The starting date (startDateTime) of the travel is after its ending date (endDateTime)"
+            );
+        
+        if(
+            entity.getStartDateTime().isEqual(entity.getEndDateTime())
+        )
+            throw new InvalidArgumentException(
+                "/api/travels",
+                "The starting date (startDateTime) of the travel is the same as its ending date (endDateTime)"
             );
 
         travelService.create( entity );
@@ -171,10 +188,9 @@ public class TravelController {
 
         if( travelService.hasNoFunds(
             customerEntity.getId(),
-            entity.getAmount(),
-            id
+            entity.getAmount()
         ))
-            throw new ResourceNotFoundException(
+            throw new InvalidArgumentException(
                 "/api/travels",
                 "Not enough funds for customer with ID "
                 + customerEntity.getId()
@@ -183,14 +199,29 @@ public class TravelController {
         if( travelService.hasConflictingDates(
             customerEntity,
             entity.getStartDateTime(),
-            entity.getEndDateTime(),
-            id
+            entity.getEndDateTime()
         ))
-            throw new ResourceNotFoundException(
+            throw new InvalidArgumentException(
                 "/api/travels",
                 "Customer with ID "
                 + customerEntity.getId()
                 + " has other travels with overlapping dates"
+            );
+
+        if(
+            entity.getStartDateTime().isAfter(entity.getEndDateTime())
+        )
+            throw new InvalidArgumentException(
+                "/api/travels",
+                "The starting date (startDateTime) of the travel is after its ending date (endDateTime)"
+            );
+        
+        if(
+            entity.getStartDateTime().isEqual(entity.getEndDateTime())
+        )
+            throw new InvalidArgumentException(
+                "/api/travels",
+                "The starting date (startDateTime) of the travel is the same as its ending date (endDateTime)"
             );
 
         travelService.update( id , entity );
