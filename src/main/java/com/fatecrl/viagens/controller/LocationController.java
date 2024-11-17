@@ -22,6 +22,8 @@ import com.fatecrl.viagens.mapper.LocationMapper;
 import com.fatecrl.viagens.model.Location;
 import com.fatecrl.viagens.service.LocationService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/locations")
 public class LocationController {
@@ -67,7 +69,7 @@ public class LocationController {
 
     @PostMapping
     public ResponseEntity<LocationDTO> create(
-        @RequestBody LocationDTO dto
+        @Valid @RequestBody LocationDTO dto
     ){
         Location loc = mapper.toEntity(dto);
         locService.create( loc );
@@ -78,15 +80,16 @@ public class LocationController {
             .toUri();
         dto.setId( loc.getId() );
         return ResponseEntity.created( uri ).body( dto );
-        //return ResponseEntity.badRequest()            (400)  (to do)
-        //return ResponseEntity.unprocessable()         (422)  (to do)
-        //return ResponseEntity.internalServerError()   (500)  (to do)
+        /* every input field is String, so there's no
+        possible parsing error or inconsistency to
+        return 422 */
+        //any internalServerError (500) ?
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<LocationDTO> update(
         @PathVariable("id") Long id,
-        @RequestBody LocationDTO dto
+        @Valid @RequestBody LocationDTO dto
     ){
         if( !locService.locationExists(id) )
             return ResponseEntity.notFound().build();
@@ -94,8 +97,10 @@ public class LocationController {
         locService.update( id , mapper.toEntity(dto) );
         dto.setId(id);
         return ResponseEntity.ok(dto);
-        //return ResponseEntity.badRequest()      (400)  (to do)
-        //return ResponseEntity.unprocessable()   (422)  (to do)
+        /* every input field is String, so there's no
+        possible parsing error or inconsistency to
+        return 422 */
+        //any internalServerError (500) ?
     }
 
     @DeleteMapping("/{id}")
@@ -112,6 +117,5 @@ public class LocationController {
             
         locService.delete(id);
         return ResponseEntity.noContent().build();
-        
     }
 }

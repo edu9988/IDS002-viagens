@@ -54,7 +54,7 @@ public class LocationService implements IService<Location>{
             else /* name and city != null */
                 locations = repo.findByNameContainingAndCityContaining( name , city );
         }
-        else /* city == null || city.isEmpty() */{
+        else if( city == null || city.isEmpty() ){
             if( name == null || name.isEmpty() )
                 locations = repo.findByNicknameContaining( nickname );
             else if( nickname == null || nickname.isEmpty() )
@@ -62,7 +62,8 @@ public class LocationService implements IService<Location>{
             else /* name and nickname != null */
                 locations = repo.findByNameContainingAndNicknameContaining( name , nickname );
         }
-        
+        else /* none is null */
+            locations = repo.findByNameContainingAndNicknameContainingAndCityContaining( name , nickname , city );
         return locations;
     }
 

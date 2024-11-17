@@ -84,7 +84,8 @@ public class CustomerController {
             .path("/{id}")
             .buildAndExpand(  entity.getId() )
             .toUri();
-        return ResponseEntity.created( uri ).build();
+            dto.setId(entity.getId());
+        return ResponseEntity.created( uri ).body( dto );
         //return ResponseEntity.badRequest()            (400)  (to do)
         //return ResponseEntity.unprocessable()         (422)  (to do)
         //return ResponseEntity.internalServerError()   (500)  (to do)
@@ -100,7 +101,7 @@ public class CustomerController {
 
         customerService.update( id , mapper.toEntity(dto) );
         dto.setId(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body( dto );
         //return ResponseEntity.badRequest()      (400)  (to do)
         //return ResponseEntity.unprocessable()   (422)  (to do)
     }   

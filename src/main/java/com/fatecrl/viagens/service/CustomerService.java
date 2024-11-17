@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fatecrl.viagens.model.Customer;
-import com.fatecrl.viagens.model.Location;
 import com.fatecrl.viagens.repository.CustomerRepository;
 import com.fatecrl.viagens.repository.TravelRepository;
 

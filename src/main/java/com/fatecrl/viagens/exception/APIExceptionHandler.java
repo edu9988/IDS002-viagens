@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import io.micrometer.common.lang.NonNull;
 import jakarta.annotation.Nullable;
 
 @RestControllerAdvice
@@ -41,8 +43,9 @@ public class APIExceptionHandler extends ResponseEntityExceptionHandler{
         return super.handleExceptionInternal(ex, err, headers, status, request);
     }
 
-    /*
+    /* 
     @Nullable
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     @Override
 	protected ResponseEntity<Object> handleTypeMismatch(
         TypeMismatchException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
@@ -53,12 +56,12 @@ public class APIExceptionHandler extends ResponseEntityExceptionHandler{
         err.setTime( LocalDateTime.now() );
         err.setPath( ((ServletWebRequest) request).getRequest().getRequestURI().toString() );
         err.setMessage("One or more fields invalid");
-        List<ErrorField> ls = new ArrayList<ErrorField>();
-        ls.add(new ErrorField("message",ex.getMessage()));
-        err.setFields( ls );
+        err.setFields( retrieveErrorFields(ex) );
         
         return super.handleExceptionInternal(ex, err, headers, status, request);
-	}*/
+	}
+    */
+
 
     private List<ErrorField> retrieveErrorFields(
         MethodArgumentNotValidException ex
