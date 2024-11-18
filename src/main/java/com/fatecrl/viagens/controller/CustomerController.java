@@ -26,6 +26,8 @@ import com.fatecrl.viagens.mapper.CustomerMapper;
 import com.fatecrl.viagens.model.Customer;
 import com.fatecrl.viagens.service.CustomerService;
 
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 
 @RestController
@@ -39,14 +41,14 @@ public class CustomerController {
     private CustomerMapper mapper;
 
     @GetMapping(produces="application/json")
-    /*@ApiResponses(value = {
+    @ApiResponses(value = {
         @ApiResponse(responseCode = "200",
-        description = "Retorna a lista de categorias"),
-        @ApiResponse(responseCode = "403",
-        description = "Você não tem permissão para acessar este recurso"),
-        @ApiResponse(responseCode = "500",
-        description = "Erro interno do sistema"),
-    })*/
+        description = "Returns Customers list"),
+        @ApiResponse(responseCode = "400",
+        description = "Client input error"),
+        @ApiResponse(responseCode = "404",
+        description = "No Customer matches search parameters")
+    })
     public ResponseEntity<List<CustomerDTO>> getAll(
         @RequestParam(required = false) String name,
         @RequestParam(required = false) LocalDate birthDate
@@ -67,6 +69,14 @@ public class CustomerController {
     }
 
     @GetMapping(value="/{id}", produces="application/json")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200",
+        description = "Returns Customer"),
+        @ApiResponse(responseCode = "400",
+        description = "Client input error"),
+        @ApiResponse(responseCode = "404",
+        description = "Customer not found")
+    })
     public ResponseEntity<CustomerDTO> get( @PathVariable("id") Long id ){
         Customer customer = customerService.find(id).orElse(null);
 
@@ -76,6 +86,12 @@ public class CustomerController {
     }
 
     @PostMapping(produces="application/json")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201",
+        description = "Created successfully"),
+        @ApiResponse(responseCode = "400",
+        description = "Client input error")
+    })
     public ResponseEntity<CustomerDTO> create( @Valid @RequestBody CustomerDTO dto ){
         Customer entity = mapper.toEntity(dto);
         customerService.create( entity );
@@ -92,6 +108,14 @@ public class CustomerController {
     }
 
     @PutMapping(value="/{id}", produces="application/json")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200",
+        description = "Customer updated successfully"),
+        @ApiResponse(responseCode = "400",
+        description = "Client input error"),
+        @ApiResponse(responseCode = "404",
+        description = "Customer not found")
+    })
     public ResponseEntity<CustomerDTO> update(
         @PathVariable("id") Long id,
         @RequestBody CustomerDTO dto
@@ -107,7 +131,15 @@ public class CustomerController {
     }   
 
     @PatchMapping("/{id}")
-    public ResponseEntity<CustomerDTO> patch(
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200",
+        description = "Customer updated successfully"),
+        @ApiResponse(responseCode = "400",
+        description = "Client input error"),
+        @ApiResponse(responseCode = "404",
+        description = "Customer not found")
+    })
+    public ResponseEntity<Void> patch(
         @PathVariable("id") Long id,
         @Valid @RequestBody CustomerStatusDTO statusDTO
     ){
@@ -117,7 +149,15 @@ public class CustomerController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<CustomerDTO> delete( @PathVariable("id") Long id ) {
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "204",
+        description = "Deleted successfully"),
+        @ApiResponse(responseCode = "400",
+        description = "Customer is referenced by some Travel entity"),
+        @ApiResponse(responseCode = "404",
+        description = "Customer not found")
+    })
+    public ResponseEntity<Void> delete( @PathVariable("id") Long id ) {
         if( !customerService.customerExists(id ))
             return ResponseEntity.notFound().build();
         if( customerService.referencedBySomeTravel( id ) )
