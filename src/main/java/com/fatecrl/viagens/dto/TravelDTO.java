@@ -3,7 +3,6 @@ package com.fatecrl.viagens.dto;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import com.fatecrl.viagens.model.Location;
 import com.fatecrl.viagens.model.TripType;
 
 import jakarta.validation.constraints.NotBlank;

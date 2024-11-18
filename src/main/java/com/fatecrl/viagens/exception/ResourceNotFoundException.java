@@ -8,7 +8,7 @@ import lombok.Getter;
 @Getter
 @ResponseStatus( HttpStatus.BAD_REQUEST )
 public class ResourceNotFoundException extends RuntimeException{
-    String path;
+    private String path;
     public ResourceNotFoundException(String path,String message){
         super(message);
         this.path = path;
