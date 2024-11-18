@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fatecrl.viagens.dto.TravelDatesDTO;
 import com.fatecrl.viagens.model.Customer;
 import com.fatecrl.viagens.model.Location;
 import com.fatecrl.viagens.model.Travel;
@@ -162,16 +163,10 @@ public class TravelService implements IService<Travel>{
         repo.save(travel);
     }
 
-    public Boolean updateDates( Long id, Travel travel ){
-        Optional<Travel> _trav = repo.findById( id );
-        if( _trav.isPresent() ){
-            if( travel.getStartDateTime() != null )
-                _trav.get().setStartDateTime( travel.getStartDateTime() );
-            if( travel.getEndDateTime() != null )
-                _trav.get().setEndDateTime( travel.getEndDateTime() );
-            return true;
-        }
-        return false;
+    public void updateDates( Travel t, TravelDatesDTO dates ){
+        t.setStartDateTime( dates.getStartDateTime() );
+        t.setEndDateTime( dates.getEndDateTime() );
+        repo.save(t);
     }
 
     @Override

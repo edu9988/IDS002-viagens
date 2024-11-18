@@ -34,13 +34,6 @@ public class TravelMapper {
         return t;
     }
 
-    public Travel toEntity( TravelDatesDTO datesDTO ){
-        Travel t = new Travel();
-        t.setStartDateTime( datesDTO.getStartDateTime() );
-        t.setEndDateTime( datesDTO.getEndDateTime() );
-        return t;
-    }
-
     public TravelDTO toDTO( Travel t ){
         return new TravelDTO(
             t.getId(),

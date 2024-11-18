@@ -40,8 +40,6 @@ public class LocationController {
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200",
         description = "Returns Locations list"),
-        @ApiResponse(responseCode = "400",
-        description = "Client input error"),
         @ApiResponse(responseCode = "404",
         description = "Location not found")
     })

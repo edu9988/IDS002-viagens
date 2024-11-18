@@ -92,7 +92,9 @@ public class CustomerController {
         @ApiResponse(responseCode = "400",
         description = "Client input error")
     })
-    public ResponseEntity<CustomerDTO> create( @Valid @RequestBody CustomerDTO dto ){
+    public ResponseEntity<CustomerDTO> create(
+        @Valid @RequestBody CustomerDTO dto
+    ){
         Customer entity = mapper.toEntity(dto);
         customerService.create( entity );
         URI uri = ServletUriComponentsBuilder
@@ -118,7 +120,7 @@ public class CustomerController {
     })
     public ResponseEntity<CustomerDTO> update(
         @PathVariable("id") Long id,
-        @RequestBody CustomerDTO dto
+        @Valid @RequestBody CustomerDTO dto
     ){
         if( !customerService.customerExists(id) )
             return ResponseEntity.notFound().build();
@@ -132,8 +134,8 @@ public class CustomerController {
 
     @PatchMapping("/{id}")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200",
-        description = "Customer updated successfully"),
+        @ApiResponse(responseCode = "204",
+        description = "Customer status updated successfully"),
         @ApiResponse(responseCode = "400",
         description = "Client input error"),
         @ApiResponse(responseCode = "404",
@@ -144,7 +146,7 @@ public class CustomerController {
         @Valid @RequestBody CustomerStatusDTO statusDTO
     ){
         if( customerService.updateStatus(id,mapper.toEntity(statusDTO)) )
-            return ResponseEntity.ok().build();
+            return ResponseEntity.noContent().build();
         return ResponseEntity.notFound().build();
     }
 

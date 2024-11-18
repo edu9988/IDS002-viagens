@@ -26,6 +26,8 @@ import com.fatecrl.viagens.model.Location;
 import com.fatecrl.viagens.model.Travel;
 import com.fatecrl.viagens.service.TravelService;
 
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 
 @RestController
@@ -38,14 +40,26 @@ public class TravelController {
     @Autowired
     private TravelMapper mapper;
     
-    @GetMapping
+    @GetMapping(produces="application/json")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200",
+        description = "Returns Travels list")
+    })
     public ResponseEntity<List<TravelDTO>> getAll(){
         return ResponseEntity.ok(
             mapper.toDTO( travelService.findAll() )
         );
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(value="/{id}",produces="application/json")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200",
+        description = "Returns Travel"),
+        @ApiResponse(responseCode = "400",
+        description = "Client input error"), /* happens when {id} contains alphabetic, even though swagger blocks it */
+        @ApiResponse(responseCode = "404",
+        description = "Travel not found")
+    })
     public ResponseEntity<TravelDTO> get( @PathVariable("id") Long id ){
         Travel travel = travelService.find(id).orElse(null);
 
@@ -78,12 +92,12 @@ public class TravelController {
             ));
 
         Location destinationEntity = travelService
-        .findLocation( dto.getDestination() )
-        .orElseThrow(()->new ResourceNotFoundException(
-            "/api/travels",
-            "Location with ID "
-            + dto.getDestination()
-            + " (destination) does not exist"
+            .findLocation( dto.getDestination() )
+            .orElseThrow(()->new ResourceNotFoundException(
+                "/api/travels",
+                "Location with ID "
+                + dto.getDestination()
+                + " (destination) does not exist"
         ));
 
         Travel entity = mapper.toEntity(
@@ -233,17 +247,54 @@ public class TravelController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<TravelDTO> patch(
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "204",
+        description = "Travel dates updated successfully"),
+        @ApiResponse(responseCode = "400",
+        description = "Client input error"),
+        @ApiResponse(responseCode = "404",
+        description = "Travel not found"),
+        @ApiResponse(responseCode = "422",
+        description = "Customer has other travels with conflicting dates")
+    })
+    public ResponseEntity<Void> patch(
         @PathVariable("id") Long id,
+        @Valid
         @RequestBody TravelDatesDTO datesDTO
     ){
-        if( travelService.updateDates(id, mapper.toEntity(datesDTO)) )
-            return ResponseEntity.ok().build();
-        return ResponseEntity.notFound().build();
+        if( !travelService.travelExists( id ) )
+            return ResponseEntity.notFound().build();
+
+        Travel travelEntity = travelService.find(id).get();
+        Customer customerEntity = travelEntity.getCustomer();
+
+        if( travelService.hasConflictingDates(
+            customerEntity,
+            datesDTO.getStartDateTime(),
+            datesDTO.getEndDateTime(),
+            id
+        ))
+            throw new InvalidArgumentException(
+                "/api/travels/"+id,
+                "Customer with ID "
+                + customerEntity.getId()
+                + " has other travels with overlapping dates"
+            );
+
+        travelService.updateDates(travelEntity, datesDTO);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<TravelDTO> delete( @PathVariable("id") Long id ) {
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "204",
+        description = "Deleted successfully"),
+        @ApiResponse(responseCode = "400",
+        description = "Client input error"),
+        @ApiResponse(responseCode = "404",
+        description = "Travel not found")
+    })
+    public ResponseEntity<Void> delete( @PathVariable("id") Long id ) {
         if( !travelService.travelExists(id) )
             return ResponseEntity.notFound().build();
         travelService.delete(id);
