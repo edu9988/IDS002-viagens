@@ -26,8 +26,11 @@ import com.fatecrl.viagens.mapper.CustomerMapper;
 import com.fatecrl.viagens.model.Customer;
 import com.fatecrl.viagens.service.CustomerService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.links.Link;
+import io.swagger.v3.oas.annotations.links.LinkParameter;
 import jakarta.validation.Valid;
 
 @RestController
@@ -41,6 +44,7 @@ public class CustomerController {
     private CustomerMapper mapper;
 
     @GetMapping(produces="application/json")
+    @Operation(summary = "Get all Customers", operationId = "getCustomers")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200",
         description = "Returns Customers list"),
@@ -69,6 +73,7 @@ public class CustomerController {
     }
 
     @GetMapping(value="/{id}", produces="application/json")
+    @Operation(summary = "Get a Customer by ID", operationId = "getCustomerById")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200",
         description = "Returns Customer"),
@@ -86,9 +91,14 @@ public class CustomerController {
     }
 
     @PostMapping(produces="application/json")
+    @Operation(summary = "Create a Customer", operationId = "createCustomer")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201",
-        description = "Created successfully"),
+        description = "Created successfully",
+        links = {
+            @Link(name = "getCustomer", operationId = "getCustomerById", parameters = @LinkParameter(name = "id", expression = "$response.body#/id")),
+            @Link(name = "deleteCustomer", operationId = "deleteCustomerById", parameters = @LinkParameter(name = "id", expression = "$response.body#/id"))
+        }),
         @ApiResponse(responseCode = "400",
         description = "Client input error")
     })
@@ -110,6 +120,7 @@ public class CustomerController {
     }
 
     @PutMapping(value="/{id}", produces="application/json")
+    @Operation(summary = "Update a Customer by ID", operationId = "updateCustomerById")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200",
         description = "Customer updated successfully"),
@@ -133,6 +144,7 @@ public class CustomerController {
     }   
 
     @PatchMapping("/{id}")
+    @Operation(summary = "Update a Customer's Status by ID", operationId = "updateCustomerStatusById")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "204",
         description = "Customer status updated successfully"),
@@ -151,6 +163,7 @@ public class CustomerController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Delete a Customer by ID", operationId = "deleteCustomerById")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "204",
         description = "Deleted successfully"),

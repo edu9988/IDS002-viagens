@@ -26,6 +26,7 @@ import com.fatecrl.viagens.model.Location;
 import com.fatecrl.viagens.model.Travel;
 import com.fatecrl.viagens.service.TravelService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
@@ -41,6 +42,7 @@ public class TravelController {
     private TravelMapper mapper;
     
     @GetMapping(produces="application/json")
+    @Operation(summary = "Get all Travels", operationId = "getTravels")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200",
         description = "Returns Travels list")
@@ -52,6 +54,7 @@ public class TravelController {
     }
 
     @GetMapping(value="/{id}",produces="application/json")
+    @Operation(summary = "Get a Travel by Id", operationId = "getTravelById")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200",
         description = "Returns Travel"),
@@ -71,6 +74,7 @@ public class TravelController {
     }
 
     @PostMapping(produces="application/json")
+    @Operation(summary = "Create a Travel", operationId = "createTravel")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201",
         description = "Travel updated successfully"),
@@ -168,6 +172,7 @@ public class TravelController {
     }
 
     @PutMapping(value="/{id}", produces="application/json")
+    @Operation(summary = "Update a Travel by ID", operationId = "updateTravelById")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200",
         description = "Travel updated successfully"),
@@ -263,6 +268,7 @@ public class TravelController {
     }
 
     @PatchMapping(value="/{id}", produces="application/json")
+    @Operation(summary = "Update a Travel's dates by ID", operationId = "updateTravelDatesById")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "204",
         description = "Travel dates updated successfully"),
@@ -302,6 +308,7 @@ public class TravelController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Delete a Travel by ID", operationId = "deleteTravelById")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "204",
         description = "Deleted successfully"),

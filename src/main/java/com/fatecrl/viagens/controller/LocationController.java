@@ -22,6 +22,7 @@ import com.fatecrl.viagens.mapper.LocationMapper;
 import com.fatecrl.viagens.model.Location;
 import com.fatecrl.viagens.service.LocationService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
@@ -37,6 +38,7 @@ public class LocationController {
     private LocationMapper mapper;
 
     @GetMapping(produces="application/json")
+    @Operation(summary = "Get all Locations", operationId = "getLocations")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200",
         description = "Returns Locations list"),
@@ -65,6 +67,7 @@ public class LocationController {
     }
 
     @GetMapping(value="/{id}",produces="application/json")
+    @Operation(summary = "Get a Location by Id", operationId = "getLocationById")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200",
         description = "Returns Location"),
@@ -84,6 +87,7 @@ public class LocationController {
     }
 
     @PostMapping(produces="application/json")
+    @Operation(summary = "Create a Location", operationId = "createLocation")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201",
         description = "Created successfully"),
@@ -109,6 +113,7 @@ public class LocationController {
     }
 
     @PutMapping(value="/{id}", produces="application/json")
+    @Operation(summary = "Update a Location by ID", operationId = "updateLocationById")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200",
         description = "Location updated successfully"),
@@ -127,13 +132,11 @@ public class LocationController {
         locService.update( id , mapper.toEntity(dto) );
         dto.setId(id);
         return ResponseEntity.ok(dto);
-        /* every input field is String, so there's no
-        possible parsing error or inconsistency to
-        return 422 */
         //any internalServerError (500) ?
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Delete a Location by ID", operationId = "deleteLocationById")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "204",
         description = "Deleted successfully"),
