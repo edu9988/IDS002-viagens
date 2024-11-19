@@ -16,7 +16,10 @@ public class SwaggerConfig {
         return new OpenAPI().info( new Info()
             .title("API Viagens")
             .summary("Projeto de Desenvolvimento para Servidores 2")
-            .description("<h2>Projeto de Desenvolvimento para Servidores 2</h2><ul><li>Gabriel Pimentel</li><li>Jose Eduardo Peres</li><li>Lucas Amaral</li></ul>")
+            .description("<h2>Projeto de Desenvolvimento para "
+            +"Servidores 2</h2><ul><li>Gabriel Pimentel</li><l"
+            +"i>Jose Eduardo Peres</li><li>Lucas Amaral</li></"
+            +"ul>")
             .license(new License()
                 .name("License (MIT)")
                 .identifier("MIT")

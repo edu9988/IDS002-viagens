@@ -35,7 +35,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/customers")
-public class CustomerController {
+public class CustomerController implements IController<CustomerDTO>{
 
     @Autowired
     private CustomerService customerService;

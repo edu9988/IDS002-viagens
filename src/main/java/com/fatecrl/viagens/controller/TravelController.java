@@ -33,7 +33,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/travels")
-public class TravelController {
+public class TravelController implements IController<TravelDTO>{
 
     @Autowired
     private TravelService travelService;

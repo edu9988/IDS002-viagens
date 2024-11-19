@@ -29,7 +29,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/locations")
-public class LocationController {
+public class LocationController implements IController<LocationDTO>{
 
     @Autowired
     private LocationService locService;
@@ -76,7 +76,9 @@ public class LocationController {
         @ApiResponse(responseCode = "404",
         description = "Location not found")
     })
-    public ResponseEntity<LocationDTO> get( @PathVariable("id") Long id ){
+    public ResponseEntity<LocationDTO> get(
+        @PathVariable("id") Long id
+    ){
         Location loc = locService.find(id).orElse(null);
 
         if( loc != null )
