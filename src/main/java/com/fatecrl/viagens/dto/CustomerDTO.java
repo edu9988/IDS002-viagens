@@ -5,6 +5,7 @@ import java.time.LocalDate;
 
 import com.fatecrl.viagens.model.Status;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -14,6 +15,8 @@ import lombok.Data;
 @AllArgsConstructor
 public class CustomerDTO {
 
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY,
+    description = "Unique identifier of the customer")
     private Long id;
     @NotBlank(message = "name required")
     private String name;

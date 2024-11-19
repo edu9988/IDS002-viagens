@@ -1,5 +1,6 @@
 package com.fatecrl.viagens.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,6 +9,8 @@ import lombok.Data;
 @AllArgsConstructor
 public class LocationDTO {
 
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY,
+    description = "Unique identifier of the location")
     private Long id;
     @NotBlank(message = "name required")
     private String name;
