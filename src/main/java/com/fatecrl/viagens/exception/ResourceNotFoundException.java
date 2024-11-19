@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import lombok.Getter;
 
 @Getter
-@ResponseStatus( HttpStatus.BAD_REQUEST )
+@ResponseStatus( HttpStatus.NOT_FOUND )
 public class ResourceNotFoundException extends RuntimeException{
     private String path;
     public ResourceNotFoundException(String path,String message){

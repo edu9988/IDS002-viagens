@@ -76,12 +76,12 @@ public class APIExceptionHandler extends ResponseEntityExceptionHandler{
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<Object> handleResourceNotFoundException(ResourceNotFoundException ex) {
         ResourceError err = new ResourceError();
-        err.setStatus( 400 );
+        err.setStatus( 404 );
         err.setTime( LocalDateTime.now() );
         err.setPath( ex.getPath() );
         err.setMessage(ex.getMessage());
 
-        return new ResponseEntity<>(err, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(err, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(InvalidArgumentException.class)
