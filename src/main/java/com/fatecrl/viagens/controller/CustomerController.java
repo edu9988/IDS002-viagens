@@ -2,9 +2,11 @@ package com.fatecrl.viagens.controller;
 
 import java.net.URI;
 import java.time.LocalDate;
-import java.util.List;
 
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -53,22 +55,21 @@ public class CustomerController implements IController<CustomerDTO>{
         @ApiResponse(responseCode = "404",
         description = "No Customer matches search parameters")
     })
-    public ResponseEntity<List<CustomerDTO>> getAll(
+    public ResponseEntity<Page<CustomerDTO>> getAll(
         @RequestParam(required = false) String name,
-        @RequestParam(required = false) LocalDate birthDate
+        @RequestParam(required = false) LocalDate birthDate,
+        @ParameterObject Pageable pageable
     ){
         if( (name != null && !name.isEmpty()) ||
             (birthDate != null )
         ){
-            List<Customer> customers = customerService
-                .findByParams(name, birthDate);
-            if( customers != null && customers.size() > 0 )
-                return ResponseEntity.ok( mapper.toDTO(customers) );
-            return ResponseEntity.notFound().build();
+            Page<Customer> customers = customerService
+                .findByParams(name, birthDate, pageable);
+            return ResponseEntity.ok( mapper.toDTO(customers) );
         }
 
         return ResponseEntity.ok(
-            mapper.toDTO( customerService.findAll() )
+            mapper.toDTO( customerService.findAll( pageable ) )
         );
     }
 

@@ -5,7 +5,7 @@ import java.util.Optional;
 
 public interface IService<T> {
 
-    List<T> findAll();
+    //List<T> findAll();
     Optional<T> find( Long id );
     void create( T obj );
     void update( Long id , T obj );

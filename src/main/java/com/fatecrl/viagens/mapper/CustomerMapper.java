@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.dao.TypeMismatchDataAccessException;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import com.fatecrl.viagens.dto.CustomerDTO;
@@ -52,10 +53,8 @@ public class CustomerMapper {
         );
     }
 
-    public List<CustomerDTO> toDTO( List<Customer> cs ){
-        return cs.stream().map(
-            c -> toDTO(c)
-        ).toList();
+    public Page<CustomerDTO> toDTO( Page<Customer> cs ){
+        return cs.map(c -> toDTO(c));
     }
 
     public LocalDate toLocalDate( String date ){

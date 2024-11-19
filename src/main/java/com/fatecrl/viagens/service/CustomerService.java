@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,9 +25,9 @@ public class CustomerService implements IService<Customer> {
     public CustomerService(){
     }
 
-    @Override
-    public List<Customer> findAll(){
-        return repo.findAll();
+    //@Override
+    public Page<Customer> findAll( Pageable pageable ){
+        return repo.findAll( pageable );
     }
 
     @Override
@@ -33,20 +35,21 @@ public class CustomerService implements IService<Customer> {
         return repo.findById(id);
     }
 
-    public List<Customer> findByParams(
+    public Page<Customer> findByParams(
         String name ,
-        LocalDate birthDate
+        LocalDate birthDate,
+        Pageable pageable
     ){
-        List<Customer> customers;
+        Page<Customer> customers;
         if( name ==  null || name.isEmpty() )
             customers = repo
-                .findByBirthDate(birthDate);
+                .findByBirthDate(birthDate,pageable);
         else if( birthDate == null )
             customers = repo
-                .findByNameContaining(name);
+                .findByNameContaining(name,pageable);
         else
             customers = repo
-                .findByNameContainingAndBirthDate(name, birthDate);
+                .findByNameContainingAndBirthDate(name, birthDate,pageable);
         return customers;
     }
 

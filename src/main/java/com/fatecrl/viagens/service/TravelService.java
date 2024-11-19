@@ -31,7 +31,7 @@ public class TravelService implements IService<Travel>{
     public TravelService(){
     }
 
-    @Override
+    //@Override
     public List<Travel> findAll(){
         return repo.findAll();
     }
