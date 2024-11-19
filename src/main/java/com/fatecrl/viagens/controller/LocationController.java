@@ -1,9 +1,11 @@
 package com.fatecrl.viagens.controller;
 
 import java.net.URI;
-import java.util.List;
 
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,24 +47,23 @@ public class LocationController implements IController<LocationDTO>{
         @ApiResponse(responseCode = "404",
         description = "Location not found")
     })
-    public ResponseEntity<List<LocationDTO>> getAll(
+    public ResponseEntity<Page<LocationDTO>> getAll(
         @RequestParam(required=false) String name,
         @RequestParam(required=false) String nickname,
-        @RequestParam(required=false) String city
+        @RequestParam(required=false) String city,
+        @ParameterObject Pageable pageable
     ){
         if( (name != null && !name.isEmpty()) ||
             (nickname != null && !nickname.isEmpty()) ||
             (city != null && !city.isEmpty())
         ){
-            List<Location> locations = locService
-                .findByParams(name,nickname,city);
-            if( locations != null && locations.size() > 0 )
-                return ResponseEntity.ok( mapper.toDTO(locations) );
-            return ResponseEntity.notFound().build();
+            Page<Location> locations = locService
+                .findByParams(name,nickname,city,pageable);
+            return ResponseEntity.ok( mapper.toDTO(locations) );
         }
 
         return ResponseEntity.ok( 
-            mapper.toDTO( locService.findAll() )
+            mapper.toDTO( locService.findAll( pageable ) )
         );
     }
 

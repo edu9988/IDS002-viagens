@@ -1,9 +1,5 @@
 package com.fatecrl.viagens.mapper;
 
-import java.time.LocalDate;
-import java.util.List;
-
-import org.springframework.dao.TypeMismatchDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
@@ -57,6 +53,7 @@ public class CustomerMapper {
         return cs.map(c -> toDTO(c));
     }
 
+    /*
     public LocalDate toLocalDate( String date ){
         if( date.length() != 10
             || date.charAt(4) != '-'
@@ -66,4 +63,5 @@ public class CustomerMapper {
         LocalDate ld = LocalDate.parse( date );
         return ld;
     }
+    */
 }

@@ -1,7 +1,6 @@
 package com.fatecrl.viagens.mapper;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import com.fatecrl.viagens.dto.LocationDTO;
@@ -36,9 +35,7 @@ public class LocationMapper {
         );
     }
 
-    public List<LocationDTO> toDTO( List<Location> ls ){
-        return ls.stream().map(
-            l -> toDTO(l)
-        ).toList();
+    public Page<LocationDTO> toDTO( Page<Location> ls ){
+        return ls.map( l -> toDTO(l) );
     }
 }

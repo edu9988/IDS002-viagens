@@ -3,6 +3,8 @@ package com.fatecrl.viagens.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,8 +25,8 @@ public class LocationService implements IService<Location>{
     }
 
     //@Override
-    public List<Location> findAll(){
-        return repo.findAll();
+    public Page<Location> findAll( Pageable pageable ){
+        return repo.findAll( pageable );
     }
 
    @Override
@@ -32,38 +34,39 @@ public class LocationService implements IService<Location>{
         return repo.findById(id);
     }
 
-    public List<Location> findByParams(
+    public Page<Location> findByParams(
         String name ,
         String nickname,
-        String city
+        String city,
+        Pageable pageable
     ){
-        List<Location> locations;
+        Page<Location> locations;
         if( name == null || name.isEmpty() ){
             if( nickname == null || nickname.isEmpty() )
-                locations = repo.findByCityContaining( city );
+                locations = repo.findByCityContaining( city , pageable );
             else if( city == null || city.isEmpty() )
-                locations = repo.findByNicknameContaining( nickname );
+                locations = repo.findByNicknameContaining( nickname , pageable );
             else /* nickname and city != null */
-                locations = repo.findByNicknameContainingAndCityContaining( nickname , city );
+                locations = repo.findByNicknameContainingAndCityContaining( nickname , city , pageable );
         }
         else if( nickname == null || nickname.isEmpty() ){
             if( name == null || name.isEmpty() )
-                locations = repo.findByCityContaining( city );
+                locations = repo.findByCityContaining( city , pageable );
             else if( city == null || city.isEmpty() )
-                locations = repo.findByNameContaining( name );
+                locations = repo.findByNameContaining( name , pageable );
             else /* name and city != null */
-                locations = repo.findByNameContainingAndCityContaining( name , city );
+                locations = repo.findByNameContainingAndCityContaining( name , city , pageable );
         }
         else if( city == null || city.isEmpty() ){
             if( name == null || name.isEmpty() )
-                locations = repo.findByNicknameContaining( nickname );
+                locations = repo.findByNicknameContaining( nickname , pageable );
             else if( nickname == null || nickname.isEmpty() )
-                locations = repo.findByNameContaining( name );
+                locations = repo.findByNameContaining( name , pageable );
             else /* name and nickname != null */
-                locations = repo.findByNameContainingAndNicknameContaining( name , nickname );
+                locations = repo.findByNameContainingAndNicknameContaining( name , nickname , pageable );
         }
         else /* none is null */
-            locations = repo.findByNameContainingAndNicknameContainingAndCityContaining( name , nickname , city );
+            locations = repo.findByNameContainingAndNicknameContainingAndCityContaining( name , nickname , city , pageable );
         return locations;
     }
 
