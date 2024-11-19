@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.fatecrl.viagens.dto.LocationDTO;
-import com.fatecrl.viagens.exception.ResourceNotFoundException;
+import com.fatecrl.viagens.exception.InvalidArgumentException;
 import com.fatecrl.viagens.mapper.LocationMapper;
 import com.fatecrl.viagens.model.Location;
 import com.fatecrl.viagens.service.LocationService;
@@ -137,16 +137,16 @@ public class LocationController {
     @ApiResponses(value = {
         @ApiResponse(responseCode = "204",
         description = "Deleted successfully"),
-        @ApiResponse(responseCode = "400",
-        description = "Location is referenced by some Travel entity"),
         @ApiResponse(responseCode = "404",
-        description = "Location not found")
+        description = "Location not found"),
+        @ApiResponse(responseCode = "422",
+        description = "Location is referenced by some Travel entity")
     })
     public ResponseEntity<Void> delete( @PathVariable("id") Long id ) {
         if( !locService.locationExists(id) )
             return ResponseEntity.notFound().build();
         if( locService.referencedBySomeTravel( id ) )
-            throw new ResourceNotFoundException(
+            throw new InvalidArgumentException(
                 "/api/locations/"+id,
                 "Location with ID "
                 + id

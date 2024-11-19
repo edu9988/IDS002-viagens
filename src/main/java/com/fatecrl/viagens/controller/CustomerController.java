@@ -21,7 +21,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.fatecrl.viagens.dto.CustomerDTO;
 import com.fatecrl.viagens.dto.CustomerStatusDTO;
-import com.fatecrl.viagens.exception.ResourceNotFoundException;
+import com.fatecrl.viagens.exception.InvalidArgumentException;
 import com.fatecrl.viagens.mapper.CustomerMapper;
 import com.fatecrl.viagens.model.Customer;
 import com.fatecrl.viagens.service.CustomerService;
@@ -154,16 +154,16 @@ public class CustomerController {
     @ApiResponses(value = {
         @ApiResponse(responseCode = "204",
         description = "Deleted successfully"),
-        @ApiResponse(responseCode = "400",
-        description = "Customer is referenced by some Travel entity"),
         @ApiResponse(responseCode = "404",
-        description = "Customer not found")
+        description = "Customer not found"),
+        @ApiResponse(responseCode = "422",
+        description = "Customer is referenced by some Travel entity")
     })
     public ResponseEntity<Void> delete( @PathVariable("id") Long id ) {
         if( !customerService.customerExists(id ))
             return ResponseEntity.notFound().build();
         if( customerService.referencedBySomeTravel( id ) )
-            throw new ResourceNotFoundException(
+            throw new InvalidArgumentException(
                 "/api/customers/"+id,
                 "Customer with ID "
                 + id

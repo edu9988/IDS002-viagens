@@ -70,8 +70,22 @@ public class TravelController {
         return ResponseEntity.notFound().build();
     }
 
-    @PostMapping
-    public ResponseEntity<TravelDTO> create( @Valid @RequestBody TravelDTO dto ){
+    @PostMapping(produces="application/json")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201",
+        description = "Travel updated successfully"),
+        @ApiResponse(responseCode = "400",
+        description = "Client input error"),
+        @ApiResponse(responseCode = "404",
+        description = "Customer, source or destination not found"),
+        @ApiResponse(responseCode = "422",
+        description = "Customer has other travels with conflicting dates"
+        + " or not enough funds,"
+        + " or endDateTime is not after startDateTime")
+    })
+    public ResponseEntity<TravelDTO> create(
+        @Valid @RequestBody TravelDTO dto
+    ){
 
         Customer customerEntity = travelService
             .findCustomer( dto.getCustomer() )
@@ -131,18 +145,13 @@ public class TravelController {
 
         if(
             entity.getStartDateTime().isAfter(entity.getEndDateTime())
-        )
-            throw new InvalidArgumentException(
-                "/api/travels",
-                "The starting date (startDateTime) of the travel is after its ending date (endDateTime)"
-            );
-        
-        if(
+            ||
             entity.getStartDateTime().isEqual(entity.getEndDateTime())
         )
             throw new InvalidArgumentException(
                 "/api/travels",
-                "The starting date (startDateTime) of the travel is the same as its ending date (endDateTime)"
+                "Invalid date range: "
+                + "the endDateTime must be after the startDateTime"
             );
 
         travelService.create( entity );
@@ -158,10 +167,22 @@ public class TravelController {
         //return ResponseEntity.internalServerError()   (500)  (to do)
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(value="/{id}", produces="application/json")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200",
+        description = "Travel updated successfully"),
+        @ApiResponse(responseCode = "400",
+        description = "Client input error"),
+        @ApiResponse(responseCode = "404",
+        description = "Travel, customer, source or destination not found"),
+        @ApiResponse(responseCode = "422",
+        description = "Customer has other travels with conflicting dates"
+        + " or not enough funds,"
+        + " or endDateTime is not after startDateTime")
+    })
     public ResponseEntity<TravelDTO> update(
         @PathVariable("id") Long id,
-        @RequestBody TravelDTO dto
+        @Valid @RequestBody TravelDTO dto
     ){
         if( !travelService.travelExists( id ) )
             return ResponseEntity.notFound().build();
@@ -224,18 +245,13 @@ public class TravelController {
 
         if(
             entity.getStartDateTime().isAfter(entity.getEndDateTime())
-        )
-            throw new InvalidArgumentException(
-                "/api/travels",
-                "The starting date (startDateTime) of the travel is after its ending date (endDateTime)"
-            );
-        
-        if(
+            ||
             entity.getStartDateTime().isEqual(entity.getEndDateTime())
         )
             throw new InvalidArgumentException(
                 "/api/travels",
-                "The starting date (startDateTime) of the travel is the same as its ending date (endDateTime)"
+                "Invalid date range: "
+                + "the endDateTime must be after the startDateTime"
             );
 
         travelService.update( id , entity );
@@ -246,7 +262,7 @@ public class TravelController {
         //return ResponseEntity.unprocessable()   (422)  (to do)
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping(value="/{id}", produces="application/json")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "204",
         description = "Travel dates updated successfully"),
