@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-
 import com.fatecrl.viagens.dto.CustomerDTO;
 import com.fatecrl.viagens.dto.CustomerStatusDTO;
 import com.fatecrl.viagens.exception.InvalidArgumentException;
@@ -31,8 +30,6 @@ import com.fatecrl.viagens.service.CustomerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.links.Link;
-import io.swagger.v3.oas.annotations.links.LinkParameter;
 import jakarta.validation.Valid;
 
 @RestController
@@ -46,14 +43,12 @@ public class CustomerController implements IController<CustomerDTO>{
     private CustomerMapper mapper;
 
     @GetMapping(produces="application/json")
-    @Operation(summary = "Get all Customers", operationId = "getCustomers")
+    @Operation(summary = "Get all Customers")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200",
         description = "Returns Customers list"),
         @ApiResponse(responseCode = "400",
-        description = "Client input error"),
-        @ApiResponse(responseCode = "404",
-        description = "No Customer matches search parameters")
+        description = "Client input error")
     })
     public ResponseEntity<Page<CustomerDTO>> getAll(
         @RequestParam(required = false) String name,
@@ -74,7 +69,7 @@ public class CustomerController implements IController<CustomerDTO>{
     }
 
     @GetMapping(value="/{id}", produces="application/json")
-    @Operation(summary = "Get a Customer by ID", operationId = "getCustomerById")
+    @Operation(summary = "Get a Customer by ID")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200",
         description = "Returns Customer"),
@@ -92,14 +87,10 @@ public class CustomerController implements IController<CustomerDTO>{
     }
 
     @PostMapping(produces="application/json")
-    @Operation(summary = "Create a Customer", operationId = "createCustomer")
+    @Operation(summary = "Create a Customer")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201",
-        description = "Created successfully",
-        links = {
-            @Link(name = "getCustomer", operationId = "getCustomerById", parameters = @LinkParameter(name = "id", expression = "$response.body#/id")),
-            @Link(name = "deleteCustomer", operationId = "deleteCustomerById", parameters = @LinkParameter(name = "id", expression = "$response.body#/id"))
-        }),
+        description = "Created successfully"),
         @ApiResponse(responseCode = "400",
         description = "Client input error")
     })
@@ -115,13 +106,10 @@ public class CustomerController implements IController<CustomerDTO>{
             .toUri();
             dto.setId(entity.getId());
         return ResponseEntity.created( uri ).body( dto );
-        //return ResponseEntity.badRequest()            (400)  (to do)
-        //return ResponseEntity.unprocessable()         (422)  (to do)
-        //return ResponseEntity.internalServerError()   (500)  (to do)
     }
 
     @PutMapping(value="/{id}", produces="application/json")
-    @Operation(summary = "Update a Customer by ID", operationId = "updateCustomerById")
+    @Operation(summary = "Update a Customer by ID")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200",
         description = "Customer updated successfully"),
@@ -145,7 +133,7 @@ public class CustomerController implements IController<CustomerDTO>{
     }   
 
     @PatchMapping("/{id}")
-    @Operation(summary = "Update a Customer's Status by ID", operationId = "updateCustomerStatusById")
+    @Operation(summary = "Update a Customer's Status by ID")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "204",
         description = "Customer status updated successfully"),
@@ -158,13 +146,13 @@ public class CustomerController implements IController<CustomerDTO>{
         @PathVariable("id") Long id,
         @Valid @RequestBody CustomerStatusDTO statusDTO
     ){
-        if( customerService.updateStatus(id,mapper.toEntity(statusDTO)) )
+        if( customerService.updateStatus(id,statusDTO) )
             return ResponseEntity.noContent().build();
         return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "Delete a Customer by ID", operationId = "deleteCustomerById")
+    @Operation(summary = "Delete a Customer by ID")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "204",
         description = "Deleted successfully"),

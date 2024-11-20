@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fatecrl.viagens.dto.CustomerStatusDTO;
 import com.fatecrl.viagens.model.Customer;
 import com.fatecrl.viagens.repository.CustomerRepository;
 import com.fatecrl.viagens.repository.TravelRepository;
@@ -67,11 +68,11 @@ public class CustomerService implements IService<Customer> {
         repo.save(customer);
     }
 
-    public Boolean updateStatus( Long id, Customer customer ){
-        Optional<Customer> _cust = repo.findById( id );
-        if( _cust.isPresent() ){
-            if( customer.getStatus() != null )
-                _cust.get().setStatus( customer.getStatus() );
+    public Boolean updateStatus( Long id, CustomerStatusDTO dto ){
+        Optional<Customer> cust = repo.findById( id );
+        if( cust.isPresent() ){
+            cust.get().setStatus( dto.getStatus() );
+            repo.save(cust.get());
             return true;
         }
         return false;

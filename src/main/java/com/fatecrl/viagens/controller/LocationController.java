@@ -40,7 +40,7 @@ public class LocationController implements IController<LocationDTO>{
     private LocationMapper mapper;
 
     @GetMapping(produces="application/json")
-    @Operation(summary = "Get all Locations", operationId = "getLocations")
+    @Operation(summary = "Get all Locations")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200",
         description = "Returns Locations list"),
@@ -68,7 +68,7 @@ public class LocationController implements IController<LocationDTO>{
     }
 
     @GetMapping(value="/{id}",produces="application/json")
-    @Operation(summary = "Get a Location by Id", operationId = "getLocationById")
+    @Operation(summary = "Get a Location by ID")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200",
         description = "Returns Location"),
@@ -90,7 +90,7 @@ public class LocationController implements IController<LocationDTO>{
     }
 
     @PostMapping(produces="application/json")
-    @Operation(summary = "Create a Location", operationId = "createLocation")
+    @Operation(summary = "Create a Location")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201",
         description = "Created successfully"),
@@ -116,7 +116,7 @@ public class LocationController implements IController<LocationDTO>{
     }
 
     @PutMapping(value="/{id}", produces="application/json")
-    @Operation(summary = "Update a Location by ID", operationId = "updateLocationById")
+    @Operation(summary = "Update a Location by ID")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200",
         description = "Location updated successfully"),
@@ -139,7 +139,7 @@ public class LocationController implements IController<LocationDTO>{
     }
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "Delete a Location by ID", operationId = "deleteLocationById")
+    @Operation(summary = "Delete a Location by ID")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "204",
         description = "Deleted successfully"),

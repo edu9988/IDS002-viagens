@@ -44,7 +44,7 @@ public class TravelController implements IController<TravelDTO>{
     private TravelMapper mapper;
     
     @GetMapping(produces="application/json")
-    @Operation(summary = "Get all Travels", operationId = "getTravels")
+    @Operation(summary = "Get all Travels")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200",
         description = "Returns Travels list")
@@ -58,7 +58,7 @@ public class TravelController implements IController<TravelDTO>{
     }
 
     @GetMapping(value="/{id}",produces="application/json")
-    @Operation(summary = "Get a Travel by Id", operationId = "getTravelById")
+    @Operation(summary = "Get a Travel by ID")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200",
         description = "Returns Travel"),
@@ -78,7 +78,7 @@ public class TravelController implements IController<TravelDTO>{
     }
 
     @PostMapping(produces="application/json")
-    @Operation(summary = "Create a Travel", operationId = "createTravel")
+    @Operation(summary = "Create a Travel")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201",
         description = "Travel updated successfully"),
@@ -176,7 +176,7 @@ public class TravelController implements IController<TravelDTO>{
     }
 
     @PutMapping(value="/{id}", produces="application/json")
-    @Operation(summary = "Update a Travel by ID", operationId = "updateTravelById")
+    @Operation(summary = "Update a Travel by ID")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200",
         description = "Travel updated successfully"),
@@ -272,7 +272,7 @@ public class TravelController implements IController<TravelDTO>{
     }
 
     @PatchMapping(value="/{id}", produces="application/json")
-    @Operation(summary = "Update a Travel's dates by ID", operationId = "updateTravelDatesById")
+    @Operation(summary = "Update a Travel's dates by ID")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "204",
         description = "Travel dates updated successfully"),
@@ -312,7 +312,7 @@ public class TravelController implements IController<TravelDTO>{
     }
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "Delete a Travel by ID", operationId = "deleteTravelById")
+    @Operation(summary = "Delete a Travel by ID")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "204",
         description = "Deleted successfully"),
