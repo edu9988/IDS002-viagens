@@ -1,7 +1,6 @@
 package com.fatecrl.viagens.controller;
 
 import java.net.URI;
-import java.util.List;
 
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;

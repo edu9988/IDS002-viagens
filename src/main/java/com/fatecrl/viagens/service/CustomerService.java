@@ -24,7 +24,7 @@ public class CustomerService implements IService<Customer> {
     public CustomerService(){
     }
 
-    //@Override
+    @Override
     public Page<Customer> findAll( Pageable pageable ){
         return repo.findAll( pageable );
     }

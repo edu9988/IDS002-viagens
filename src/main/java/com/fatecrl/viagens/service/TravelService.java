@@ -33,7 +33,7 @@ public class TravelService implements IService<Travel>{
     public TravelService(){
     }
 
-    //@Override
+    @Override
     public Page<Travel> findAll( Pageable pageable ){
         return repo.findAll( pageable );
     }

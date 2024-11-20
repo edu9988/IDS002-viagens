@@ -23,7 +23,7 @@ public class LocationService implements IService<Location>{
     public LocationService(){
     }
 
-    //@Override
+    @Override
     public Page<Location> findAll( Pageable pageable ){
         return repo.findAll( pageable );
     }
