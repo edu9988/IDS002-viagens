@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,8 +34,8 @@ public class TravelService implements IService<Travel>{
     }
 
     //@Override
-    public List<Travel> findAll(){
-        return repo.findAll();
+    public Page<Travel> findAll( Pageable pageable ){
+        return repo.findAll( pageable );
     }
 
     @Override

@@ -1,11 +1,9 @@
 package com.fatecrl.viagens.mapper;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import com.fatecrl.viagens.dto.TravelDTO;
-import com.fatecrl.viagens.dto.TravelDatesDTO;
 import com.fatecrl.viagens.model.Customer;
 import com.fatecrl.viagens.model.Location;
 import com.fatecrl.viagens.model.Travel;
@@ -48,9 +46,7 @@ public class TravelMapper {
         );
     }
 
-    public List<TravelDTO> toDTO( List<Travel> ts ){
-        return ts.stream().map(
-            t -> toDTO(t)
-        ).toList();
+    public Page<TravelDTO> toDTO( Page<Travel> ts ){
+        return ts.map( t -> toDTO(t) );
     }
 }

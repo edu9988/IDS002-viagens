@@ -3,7 +3,10 @@ package com.fatecrl.viagens.controller;
 import java.net.URI;
 import java.util.List;
 
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,9 +50,11 @@ public class TravelController implements IController<TravelDTO>{
         @ApiResponse(responseCode = "200",
         description = "Returns Travels list")
     })
-    public ResponseEntity<List<TravelDTO>> getAll(){
+    public ResponseEntity<Page<TravelDTO>> getAll(
+        @ParameterObject Pageable pageable
+    ){
         return ResponseEntity.ok(
-            mapper.toDTO( travelService.findAll() )
+            mapper.toDTO( travelService.findAll(pageable) )
         );
     }
 
