@@ -243,7 +243,8 @@ public class TravelController implements IController<TravelDTO>{
         if( travelService.hasConflictingDates(
             customerEntity,
             entity.getStartDateTime(),
-            entity.getEndDateTime()
+            entity.getEndDateTime(),
+            id
         ))
             throw new InvalidArgumentException(
                 "/api/travels",
