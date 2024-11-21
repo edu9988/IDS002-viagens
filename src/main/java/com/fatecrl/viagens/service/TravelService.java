@@ -110,7 +110,7 @@ public class TravelService implements IService<Travel>{
         List<Travel> ts = repo.findByCustomer(customer);
 
         ts = ts.stream().filter(t ->
-            t.getId() != travelId
+            t.getId().compareTo( travelId ) != 0
         ).toList();
 
         ts = ts.stream().filter(t ->

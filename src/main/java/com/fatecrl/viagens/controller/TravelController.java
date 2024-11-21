@@ -170,9 +170,6 @@ public class TravelController implements IController<TravelDTO>{
             .toUri();
         dto.setId( entity.getId() );
         return ResponseEntity.created( uri ).body( dto );
-
-        //return ResponseEntity.unprocessable()         (422)  (to do)
-        //return ResponseEntity.internalServerError()   (500)  (to do)
     }
 
     @PutMapping(value="/{id}", produces="application/json")
@@ -267,9 +264,6 @@ public class TravelController implements IController<TravelDTO>{
         travelService.update( id , entity );
         dto.setId(id);
         return ResponseEntity.ok(dto);
-    
-        //return ResponseEntity.badRequest()      (400)  (to do)
-        //return ResponseEntity.unprocessable()   (422)  (to do)
     }
 
     @PatchMapping(value="/{id}", produces="application/json")
