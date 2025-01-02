@@ -1,5 +1,7 @@
 # IDS002-viagens
 
+This is an API developed for academic purposes. 
+
 ## Operations supported
 
 | HTTP | URL | Payload | Description
@@ -10,7 +12,7 @@
 | PUT | /api/customers/\<id\> | json | Update Customer
 | PATCH | /api/customers/\<id\> | json | Update Customer's Status
 | DELETE | /api/customers/\<id\> | - | Remove Customer
-|  |  |  | 
+|  | 
 | GET | /api/locations | - | Get all Locations
 | GET | /api/locations/\<id\> | - | Get a single Location
 | POST | /api/locations | json | Create new Location
@@ -24,7 +26,7 @@
 | PATCH | /api/travels/\<id\> | json | Update Travel's Dates
 | DELETE | /api/travels/\<id\> | - | Remove Travel
 
-Where json payloads are of the form (ommiting `id` attribute that goes in responses)
+Where json payloads are of the form (ommiting `id` attribute that goes in responses):
 
 `Customer`
 ```javascript
