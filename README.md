@@ -23,3 +23,19 @@
 | PUT | /api/travels/\<id\> | json | Update Travel
 | PATCH | /api/travels/\<id\> | json | Update Travel's Dates
 | DELETE | /api/travels/\<id\> | - | Remove Travel
+
+Where Customer object is of the form
+
+```javascript
+{
+  "name"        : String,
+  "lastname"    : String,
+  "address"     : String,
+  "city"        : String,
+  "state"       : String,
+  "country"     : String,
+  "birthDate"   : LocalDate (java.time),
+  "limitAmount" : BigDecimal (java.math),
+  "status"      : Status (enum)
+}
+```
