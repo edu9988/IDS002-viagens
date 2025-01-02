@@ -11,13 +11,11 @@
 | PATCH | json | /api/customers/\<id\> | Update Customer's Status
 | DELETE | - | /api/customers/\<id\> | Remove Customer
 |  |  |  | 
-|  |  |  | 
 | GET | - | /api/locations | Get all Locations
 | GET | - | /api/locations/\<id\> | Get a single Location
 | POST | json | /api/locations | Create new Location
 | PUT | json | /api/locations/\<id\> | Update Location
 | DELETE | - | /api/locations/\<id\> | Remove Location
-|  |  |  | 
 |  |  |  | 
 | GET | - | /api/travels | Get all Travels
 | GET | - | /api/travels/\<id\> | Get a single Travel
