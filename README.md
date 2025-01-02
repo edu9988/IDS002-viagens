@@ -24,8 +24,9 @@
 | PATCH | /api/travels/\<id\> | json | Update Travel's Dates
 | DELETE | /api/travels/\<id\> | - | Remove Travel
 
-Where Customer object is of the form
+Where json payloads are of the form (ommiting `id` attribute that goes in responses)
 
+`Customer`
 ```javascript
 {
   "name"        : String,
@@ -37,5 +38,31 @@ Where Customer object is of the form
   "birthDate"   : LocalDate (java.time),
   "limitAmount" : BigDecimal (java.math),
   "status"      : Status (enum)
+}
+```
+
+`Location`
+```javascript
+{
+  "name"    : String,
+  "nickname": String,
+  "address" : String,
+  "city"    : String,
+  "state"   : String,
+  "country" : String
+}
+```
+
+`Travel`
+```javascript
+{
+  "orderNumber"     : String,
+  "amount"          : BigDecimal (java.math),
+  "source"          : Location,
+  "destination"     : Location,
+  "startDateTime"   : LocalDateTime (java.time),
+  "endDateTime"     : LocalDateTime (java.time),
+  "type"            : TripType (enum),
+  "customer"        : Customer
 }
 ```
